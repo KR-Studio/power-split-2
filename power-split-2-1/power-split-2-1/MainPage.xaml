@@ -1,0 +1,118 @@
+﻿<Page
+    x:Class="PowerSplit2.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PowerSplit2"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="Page_Loaded"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <StackPanel x:Name="contentPanel" Orientation="Vertical" Margin="120,30,0,0">
+            <TextBlock x:Name="title" HorizontalAlignment="Left" Text="PowerSplit 4" FontSize="36"/>
+            <StackPanel Orientation="Horizontal" Margin="0,40,0,20">
+                <StackPanel x:Name="checkBoxesPanel" Orientation="Vertical">
+                    <TextBlock HorizontalAlignment="Left" Text="Accessible processor cores (by coreID)" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                        <StackPanel>
+                            <CheckBox x:Name="checkBox1" Content="0" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" IsChecked="True" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox2" Content="1" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <CheckBox x:Name="checkBox3" Content="2" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox4" Content="3" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <CheckBox x:Name="checkBox5" Content="4" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox6" Content="5" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <CheckBox x:Name="checkBox7" Content="6" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox8" Content="7" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <CheckBox x:Name="checkBox9" Content="8" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox10" Content="9" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <CheckBox x:Name="checkBox11" Content="10" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox12" Content="11" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock HorizontalAlignment="Left" Text="Input multipliers for simultaneous linear algebraic equations:" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,20,0,20"/>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" RequestedTheme="Default">
+                            <Image Source="/Assets/Left_curly_bracket.png" Width="70" Height="226" Stretch="Uniform" Margin="0,20,0,0"></Image>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="20,0,100,0">
+                            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                                <TextBox x:Name="textBoxRow1X1Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X1 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow1X2Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X2 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow1X3Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X3 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow1X4Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X4 =" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow1BMultiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                                <TextBox x:Name="textBoxRow2X1Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X1 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow2X2Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X2 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow2X3Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X3 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow2X4Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X4 =" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow2BMultiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                                <TextBox x:Name="textBoxRow3X1Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X1 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow3X2Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X2 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow3X3Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X3 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow3X4Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X4 =" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow3BMultiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                                <TextBox x:Name="textBoxRow4X1Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X1 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow4X2Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X2 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow4X3Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X3 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow4X4Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                                <TextBlock HorizontalAlignment="Left" Text="X4 =" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
+                                <TextBox x:Name="textBoxRow4BMultiplier" Text="" TextWrapping="Wrap" FontSize="22" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock HorizontalAlignment="Left" Text="Select calculation method:" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,20,0,0"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                        <RadioButton x:Name="radioButton1" Content="Gaussian elimination" GroupName="methodsGroup" Checked="RadioChecked" Margin="10,0,10,0"></RadioButton>
+                        <RadioButton x:Name="radioButton2" Content="Cramer`s rule" GroupName="methodsGroup" Checked="RadioChecked" Margin="10,0,10,0"></RadioButton>
+                        <RadioButton x:Name="radioButton3" Content="Simple-iteration method" GroupName="methodsGroup" Checked="RadioChecked" Margin="10,0,10,0"></RadioButton>
+                        <RadioButton x:Name="radioButton4" Content="Gauss–Seidel method" GroupName="methodsGroup" Checked="RadioChecked" Margin="10,0,10,0"></RadioButton>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                        <Button x:Name="calculateBtn" Content="Calculate" Width="628" FontSize="22" Margin="90,0,0,0" Click="Button_Click"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Width="400">
+                    <Border BorderThickness="1" BorderBrush="White">
+                        <StackPanel Orientation="Vertical" Margin="10,10,10,10">
+                            <TextBlock x:Name="textBlockAccessibleProcessors" Text="Accessible processor cores number: 0" TextWrapping="Wrap" FontSize="18" Height="50" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="textBlockActiveProcessors" Text="Active processor cores by id: 0" TextWrapping="Wrap" FontSize="18" Height="50" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="textBlockOutput" Text="Area for computed results" TextWrapping="Wrap" FontSize="18" Height="418" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>
