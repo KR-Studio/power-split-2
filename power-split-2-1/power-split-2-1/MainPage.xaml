@@ -94,10 +94,10 @@
                     </StackPanel>
                     <TextBlock HorizontalAlignment="Left" Text="Select calculation method:" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,20,0,0"/>
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                        <RadioButton x:Name="radioButton1" Content="Gaussian elimination" GroupName="methodsGroup" Checked="RadioChecked" Margin="10,0,10,0"></RadioButton>
-                        <RadioButton x:Name="radioButton2" Content="Cramer`s rule" GroupName="methodsGroup" Checked="RadioChecked" Margin="10,0,10,0"></RadioButton>
-                        <RadioButton x:Name="radioButton3" Content="Simple-iteration method" GroupName="methodsGroup" Checked="RadioChecked" Margin="10,0,10,0"></RadioButton>
-                        <RadioButton x:Name="radioButton4" Content="Gauss–Seidel method" GroupName="methodsGroup" Checked="RadioChecked" Margin="10,0,10,0"></RadioButton>
+                        <RadioButton x:Name="radioButton1" Content="Gaussian elimination" GroupName="methodsGroup" Margin="10,0,10,0"></RadioButton>
+                        <RadioButton x:Name="radioButton2" Content="Cramer`s rule" GroupName="methodsGroup" Margin="10,0,10,0"></RadioButton>
+                        <RadioButton x:Name="radioButton3" Content="Simple-iteration method" GroupName="methodsGroup" Margin="10,0,10,0"></RadioButton>
+                        <RadioButton x:Name="radioButton4" Content="Gauss–Seidel method" GroupName="methodsGroup" Margin="10,0,10,0"></RadioButton>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                         <Button x:Name="calculateBtn" Content="Calculate" Width="628" FontSize="22" Margin="90,0,0,0" Click="Button_Click"/>
