@@ -10,8 +10,8 @@
 
     <Grid>
         <StackPanel x:Name="contentPanel" Orientation="Vertical" Margin="120,30,0,0">
-            <TextBlock x:Name="title" HorizontalAlignment="Left" Text="PowerSplit 4" FontSize="36"/>
-            <StackPanel Orientation="Horizontal" Margin="0,40,0,20">
+            <TextBlock x:Name="title" HorizontalAlignment="Left" Text="PowerSplit 2.1" FontSize="36"/>
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,20">
                 <StackPanel x:Name="checkBoxesPanel" Orientation="Vertical">
                     <TextBlock HorizontalAlignment="Left" Text="Accessible processor cores (by coreID)" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}"/>
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
@@ -40,13 +40,14 @@
                             <CheckBox x:Name="checkBox12" Content="11" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
                         </StackPanel>
                     </StackPanel>
-                    <TextBlock HorizontalAlignment="Left" Text="Input multipliers for simultaneous linear algebraic equations:" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,20,0,20"/>
+                    <ToggleSwitch x:Name="calculationModeToggle" Header="Parallel computing mode" FontSize="22" IsOn="True"></ToggleSwitch>
+                    <TextBlock HorizontalAlignment="Left" Text="Input multipliers for simultaneous linear algebraic equations:" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,20"/>
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Vertical" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" RequestedTheme="Default">
-                            <Image Source="/Assets/Left_curly_bracket.png" Width="70" Height="226" Stretch="Uniform" Margin="0,20,0,0"></Image>
+                            <Image Source="/Assets/Left_curly_bracket.png" Width="70" Height="226" Stretch="Uniform" Margin="0,0,0,0"></Image>
                         </StackPanel>
                         <StackPanel Orientation="Vertical" Margin="20,0,100,0">
-                            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                                 <TextBox x:Name="textBoxRow1X1Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
                                 <TextBlock HorizontalAlignment="Left" Text="X1 +" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,0,20,0"/>
                                 <TextBox x:Name="textBoxRow1X2Multiplier" Text="" TextWrapping="Wrap" FontSize="22" />
