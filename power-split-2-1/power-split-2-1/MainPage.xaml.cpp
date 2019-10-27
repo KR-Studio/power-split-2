@@ -25,8 +25,13 @@ using namespace Windows::UI::Xaml::Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
+#define N 4
+#define M 4
+#define M2 5
+
 // Vector with ids of processors that have activeState in checkBoxes
 std::vector<int> checkBoxesActive = { 0 };
+std::vector<int> equationMultipliers = {};
 std::vector<double> averages;
 
 MainPage::MainPage()
@@ -97,6 +102,76 @@ void thread_average(int vol)
 	std::generate(v.begin(), v.end(), std::rand);
 	double average = std::accumulate(v.begin(), v.end(), 0.0) / v.size();
 	averages.push_back(average);
+}
+
+void PowerSplit2::MainPage::gauss_elimination()
+{
+	int i, j, n, m;
+	
+	
+	n = N;
+	m = M2;
+	float** matrix = new float* [n];
+	for (i = 0; i < n; i++)
+		matrix[i] = new float[m];
+
+	
+	int pushedValues = 0;
+	for (i = 0; i < n; i++) {
+		for (j = 0; j < m; j++)
+		{
+			
+
+			matrix[i][j] = equationMultipliers[j + pushedValues];
+		}
+		pushedValues += 5;
+	}
+
+		
+
+	
+	textBlockOutput->Text = "matrix: \n";
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < m; j++) {
+			textBlockOutput->Text += matrix[i][j] + " ";
+		}
+		textBlockOutput->Text += "\n";
+	}
+	textBlockOutput->Text += "\n";
+
+	
+	float  tmp, * xx = new float[m];
+	int k;
+
+	for (i = 0; i < n; i++)
+	{
+		tmp = matrix[i][i];
+		for (j = n; j >= i; j--)
+			matrix[i][j] /= tmp;
+		for (j = i + 1; j < n; j++)
+		{
+			tmp = matrix[j][i];
+			for (k = n; k >= i; k--)
+				matrix[j][k] -= tmp * matrix[i][k];
+		}
+	}
+	
+	xx[n - 1] = matrix[n - 1][n];
+	for (i = n - 2; i >= 0; i--)
+	{
+		xx[i] = matrix[i][n];
+		for (j = i + 1; j < n; j++) xx[i] -= matrix[i][j] * xx[j];
+	}
+
+	
+	for (i = 0; i < n; i++)
+	{
+		textBlockOutput->Text += xx[i] + " ";
+	}
+	textBlockOutput->Text += "\n";
+
+	delete[] matrix;
 }
 
 
@@ -175,6 +250,23 @@ void PowerSplit2::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::
 
 	BOOL success = SetProcessAffinityMask(process, processAffinityMask);
 
+	// Array with CheckBox^ checkBoxes
+	TextBox^ multiplierTextBoxes[] = { textBoxRow1X1Multiplier, textBoxRow1X2Multiplier, textBoxRow1X3Multiplier, textBoxRow1X4Multiplier, textBoxRow1BMultiplier, textBoxRow2X1Multiplier, textBoxRow2X2Multiplier, textBoxRow2X3Multiplier, textBoxRow2X4Multiplier, textBoxRow2BMultiplier, textBoxRow3X1Multiplier, textBoxRow3X2Multiplier, textBoxRow3X3Multiplier, textBoxRow3X4Multiplier, textBoxRow3BMultiplier, textBoxRow4X1Multiplier, textBoxRow4X2Multiplier, textBoxRow4X3Multiplier, textBoxRow4X4Multiplier, textBoxRow4BMultiplier};
+
+
+	// checking active processors
+	for each (TextBox ^ multiplierTextBox in multiplierTextBoxes)
+	{
+		// change checkBox->Content dataType from String^ to int
+		auto multiplierTextBoxContentPStr = multiplierTextBox->Text->ToString();
+		std::wstring multiplierTextBoxContentPstrWstr(multiplierTextBoxContentPStr->Data());
+		int multiplier = std::stoi(multiplierTextBoxContentPstrWstr);
+
+		// inserting processor id into vector with active processor ids
+		equationMultipliers.emplace_back(multiplier);
+	}
+
+	PowerSplit2::MainPage::gauss_elimination();
 
 	//auto elementsNumPstr = textBoxArray->Text->ToString();
 	//std::wstring elementsNumPstrWstr(elementsNumPstr->Data());
@@ -184,16 +276,7 @@ void PowerSplit2::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::
 	//std::wstring partsNumPstrWstr(partsNumPstr->Data());
 	//int partsNum = std::stoi(partsNumPstrWstr);
 
-	//int partVolume = 0;
-	//int remainderFlag = 0;
-	//if (elementsNum % partsNum != 0.0) {
-	//	partsNum += 1;
-	//	partVolume = std::floor(elementsNum / partsNum);
-	//	remainderFlag = 1;
-	//}
-	//else {
-	//	partVolume = elementsNum / partsNum;
-	//}
+	
 
 	//std::vector<std::thread> threads;
 
