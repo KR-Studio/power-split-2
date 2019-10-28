@@ -26,8 +26,7 @@ using namespace Windows::UI::Xaml::Navigation;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 #define N 4
-#define M 4
-#define M2 5
+#define M 5
 
 // Vector with ids of processors that have activeState in checkBoxes
 std::vector<int> checkBoxesActive = { 0 };
@@ -47,6 +46,61 @@ std::wstring s2ws(const std::string& str)
 	return wstrTo;
 }
 
+String^ s2ps(const std::string& dataStr)
+{
+	std::wstring dataWstr = s2ws(dataStr);
+	String^ dataPstr = ref new String(dataWstr.c_str());
+	return dataPstr;
+}
+
+
+std::string ws2s(const std::wstring& dataWstr)
+{
+	auto dataWide = dataWstr.c_str();
+	int bufferSize = WideCharToMultiByte(CP_UTF8, 0, dataWide, -1, nullptr, 0, NULL, NULL);
+	auto dataUtf8 = std::make_unique<char[]>(bufferSize);
+	if (0 == WideCharToMultiByte(CP_UTF8, 0, dataWide, -1, dataUtf8.get(), bufferSize, NULL, NULL))
+		throw std::exception("Can't convert string to UTF8");
+	return std::string(dataUtf8.get());
+}
+
+
+std::string ps2s(String^& dataPstr)
+{
+	std::wstring dataPstrWstr(dataPstr->Data());
+	auto dataStr = ws2s(dataPstrWstr);
+	return dataStr;
+}
+
+
+int ps2i(String^& dataPstr)
+{
+	std::wstring dataPstrWstr(dataPstr->Data());
+	auto dataInt = std::stoi(dataPstrWstr);
+	return dataInt;
+}
+
+
+double ps2d(String^& dataPstr)
+{
+	std::wstring dataPstrWstr(dataPstr->Data());
+	auto dataDouble = std::stod(dataPstrWstr);
+	return dataDouble;
+}
+
+
+std::wstring i2ws(const int& dataInt)
+{
+	std::wstring dataWstr = std::to_wstring(dataInt);
+	return dataWstr;
+}
+
+
+String^ i2ps(const int& dataInt)
+{
+	String^ dataPstr = ref new String(i2ws(dataInt).c_str());
+	return dataPstr;
+}
 
 void PowerSplit2::MainPage::Page_Loaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
@@ -104,13 +158,28 @@ void thread_average(int vol)
 	averages.push_back(average);
 }
 
+/*
+  Deletes a two dimensional dynamically allocated matrix
+  -- rows: The number of rows in the matrix
+  -- **matrix: the matrix to be deleted
+*/
+void delete_matrix(int rows, double** matrix)
+{
+	for (int i = 0; i < rows; ++i)
+	{
+		delete matrix[i];
+	}
+
+	delete[] matrix;
+}
+
 void PowerSplit2::MainPage::gauss_elimination()
 {
 	int i, j, n, m;
 	
 	
 	n = N;
-	m = M2;
+	m = M;
 	double** matrix = new double* [n];
 	for (i = 0; i < n; i++)
 		matrix[i] = new double[m];
@@ -168,11 +237,12 @@ void PowerSplit2::MainPage::gauss_elimination()
 	// Output results
 	for (i = 0; i < n; i++)
 	{
-		textBlockOutput->Text += xx[i] + " ";
+		String^ currentXIndexPStr = i2ps(i + 1);
+		textBlockOutput->Text += "X" + currentXIndexPStr + " = " + xx[i] + "; \n";
 	}
 	textBlockOutput->Text += "\n";
 
-	delete[] matrix;
+	delete_matrix(n, matrix);
 }
 
 
