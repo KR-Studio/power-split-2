@@ -105,7 +105,7 @@
                         <RadioButton x:Name="gaussianEliminationButton" Content="Gaussian elimination" GroupName="methodsGroup" Margin="10,0,10,0" Checked="calculationMethodRBChecked"></RadioButton>
                         <RadioButton x:Name="cramersRuleButton" Content="Cramer`s rule" GroupName="methodsGroup" Margin="10,0,10,0" Checked="calculationMethodRBChecked"></RadioButton>
                         <RadioButton x:Name="simpleIterationButton" Content="Simple-iteration method" GroupName="methodsGroup" Margin="10,0,10,0" Checked="calculationMethodRBChecked"></RadioButton>
-                        <RadioButton x:Name="gaussSeidelButton" Content="Gauss–Seidel method" GroupName="methodsGroup" Margin="10,0,10,0" Checked="calculationMethodRBChecked"></RadioButton>
+                        <RadioButton x:Name="seidelButton" Content="Seidel method" GroupName="methodsGroup" Margin="10,0,10,0" Checked="calculationMethodRBChecked"></RadioButton>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                         <Button x:Name="calculateBtn" Content="Calculate" Width="628" FontSize="22" Margin="90,0,0,0" Click="Button_Click"/>

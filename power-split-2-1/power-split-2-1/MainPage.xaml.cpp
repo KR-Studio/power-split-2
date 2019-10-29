@@ -9,6 +9,7 @@
 #include <numeric>
 #include <time.h>
 #include <bitset>
+#include <cmath>
 
 using namespace PowerSplit2;
 
@@ -407,7 +408,7 @@ void PowerSplit2::MainPage::simpleIterations() {
 		A[i] = new double[n];
 	}
 	
-	//printf("Type elements in the variables in the system: \n");
+	// Fill matrix of equation multipliers with values
 	int pushedValues = 0;
 	for (i = 0; i < n; i++)
 	{
@@ -430,7 +431,7 @@ void PowerSplit2::MainPage::simpleIterations() {
 	}
 	textBlockOutput->Text += "\n";
 
-	//printf("Members enter free system: \n");
+	// Fill array of free multipliers (the ones to the right side of the equations) with values
 	int initialBIndex = 4;
 	for (i = 0; i < n; i++) {
 		b[i] = equationMultipliers[initialBIndex];
@@ -467,7 +468,7 @@ void PowerSplit2::MainPage::simpleIterations() {
 
 	// Calculate results
 	int  count = 0, flag = 1;
-	double x, zh = 0;
+	double x, g = 0;
 	for (i = 0; i < n; i++)
 		Xk[i] = X[i];
 	do
@@ -478,15 +479,31 @@ void PowerSplit2::MainPage::simpleIterations() {
 			x = 0;
 			for (j = 0; j < n; j++)
 			{
-				if (i != j)  x += Xk[j] * A[i][j];
-				if (i == j) zh = A[i][j];
+				if (i != j) 
+				{
+					x += Xk[j] * A[i][j];
+				} 
+				if (i == j) 
+				{
+					g = A[i][j];
+				}
 			}
-			x = (b[i] - x) / zh;
+			x = (b[i] - x) / g;
 			X[i] = x;
-			if ((fabs(X[i] - Xk[i])) <= eps) flag = 0;
+			if ((fabs(X[i] - Xk[i])) <= eps) {
+				flag = 0;
+			}
 		}
+
 		for (i = 0; i < n; i++)
+		{
 			Xk[i] = X[i];
+		}
+			
+		if (count >= 35)
+		{
+			flag = NULL;
+		}
 	} while (flag);
 
 	// Output results
@@ -505,6 +522,93 @@ void PowerSplit2::MainPage::simpleIterations() {
 	delete[] X;
 	delete[] Xk;
 	delete[] b;
+}
+
+void PowerSplit2::MainPage::seidel()
+{
+	double a[4][4], b[4], x[4], x_k[4], r[4];
+	int n = N;
+	double const e = 0.000001;
+
+	// a initialization - filling matrix of equation multipliers with values
+	int pushedValues = 0;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			a[i][j] = equationMultipliers[j + pushedValues];
+		}
+		pushedValues += 5;
+	}
+
+	// Initial matrix output
+	textBlockOutput->Text += "\n";
+	textBlockOutput->Text += "Initial matrix (without free multipliers): \n";
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++) {
+			textBlockOutput->Text += a[i][j] + " ";
+		}
+		textBlockOutput->Text += "\n";
+	}
+	textBlockOutput->Text += "\n";
+
+	// b initialization - filling array of free multipliers (the ones to the right side of the equations) with values
+	int initialBIndex = 4;
+	for (int i = 0; i < n; i++) {
+		b[i] = equationMultipliers[initialBIndex];
+		initialBIndex += 5;
+	}
+
+	// Free multipliers output
+	textBlockOutput->Text += "Free multipliers (B): \n";
+	for (int i = 0; i < n; i++)
+	{
+		textBlockOutput->Text += b[i] + "\n";
+	}
+	textBlockOutput->Text += "\n";
+
+	double max = 404505.3;
+	int iteration = 0;
+	while (max > e)
+	{
+		x_k[0] = (b[0] - x[1] * a[0][1] - x[2] * a[0][2] - x[3] * a[0][3]) / a[0][0];
+		x_k[1] = (b[1] - x_k[0] * a[1][0] - x[2] * a[1][2] - x[3] * a[1][3]) / a[1][1];
+		x_k[2] = (b[2] - x_k[0] * a[2][0] - x_k[1] * a[2][1] - x[3] * a[2][3]) / a[2][2];
+		x_k[3] = (b[3] - x_k[0] * a[3][0] - x_k[1] * a[3][1] - x_k[2] * a[3][2]) / a[3][3];
+
+		max = abs(x_k[0] - x[0]);
+		for (int i = 1; i < n; i++)
+		{
+			if (abs(x_k[i] - x[i]) > max)
+			{
+				max = abs(x_k[i] - x[i]);
+			}
+		};
+
+		for (int i = 0; i < n; i++)
+		{
+			x[i] = x_k[i];
+
+			r[i] = b[i] - a[i][0] * x[0] - a[i][1] * x[1] - a[i][2] * x[2] - a[i][3] * x[3];
+			/*String ^ currentXIndexPStr = i2ps(i + 1);
+			textBlockOutput->Text += "X" + currentXIndexPStr + " = " + r[i] + "; \n";*/
+		};
+		/*textBlockOutput->Text += "End of iteration #" + iteration + "\n";
+		textBlockOutput->Text += "\n";*/
+		iteration++;
+	};
+
+	textBlockOutput->Text += "Final result: " + "\n";
+
+	for (int i = 0; i < n; i++)
+	{
+		String^ currentXIndexPStr = i2ps(i + 1);
+		textBlockOutput->Text += "X" + currentXIndexPStr + " = " + x[i] + "; \n";
+	};
+
+	String^ iterationsNum = i2ps(iteration);
+	textBlockOutput->Text += "The process of finding results took " + iterationsNum + " iterations \n";
 }
 
 void PowerSplit2::MainPage::CheckBoxClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
@@ -615,8 +719,8 @@ void PowerSplit2::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::
 	} 
 	else if (selectedCalculationMethod == "GS") 
 	{
-		//TODO: implementation
-		//equationMultipliers.clear();
+		seidel();
+		equationMultipliers.clear();
 	}
  
 
@@ -757,8 +861,8 @@ void PowerSplit2::MainPage::calculationMethodRBChecked(Platform::Object^ sender,
 		selectedCalculationMethod = "SI";
 		textBlockOutput->Text += "Calculation method is set to Simple-iteration method";
 	}
-	else if (gaussSeidelButton->IsChecked->Value == true) {
+	else if (seidelButton->IsChecked->Value == true) {
 		selectedCalculationMethod = "GS";
-		textBlockOutput->Text += "Calculation method is set to Gauss–Seidel method";
+		textBlockOutput->Text += "Calculation method is set to Seidel method";
 	}
 }

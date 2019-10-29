@@ -26,5 +26,6 @@ namespace PowerSplit2
 		void gaussElimination();
 		void cramersRule();
 		void simpleIterations();
+		void seidel();
 	};
 }
