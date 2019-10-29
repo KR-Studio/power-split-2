@@ -386,6 +386,127 @@ void PowerSplit2::MainPage::cramersRule() {
 	}
 }
 
+void PowerSplit2::MainPage::simpleIterations() {
+	int i, j;
+	double** A;     //matrix of equation multipliers
+	double* X;      //global solution array
+	double* Xk;     //current iteration (k) solution array
+	double* b;      //array of free multipliers (the ones to the right side of the equations)
+	double sumd = 0; //additional variables for calculation
+	double eps; //precision
+
+	int n = N;
+
+	
+	A = new double* [n];
+	X = new double[n];
+	Xk = new double[n];
+	b = new double[n];
+	for (i = 0; i < n; i++)
+	{
+		A[i] = new double[n];
+	}
+	
+	//printf("Type elements in the variables in the system: \n");
+	int pushedValues = 0;
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			A[i][j] = equationMultipliers[j + pushedValues];
+		}
+		pushedValues += 5;
+	}
+
+	// Initial matrix output
+	textBlockOutput->Text += "\n";
+	textBlockOutput->Text += "Initial matrix (without free multipliers): \n";
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++) {
+			textBlockOutput->Text += A[i][j] + " ";
+		}
+		textBlockOutput->Text += "\n";
+	}
+	textBlockOutput->Text += "\n";
+
+	//printf("Members enter free system: \n");
+	int initialBIndex = 4;
+	for (i = 0; i < n; i++) {
+		b[i] = equationMultipliers[initialBIndex];
+		initialBIndex += 5;
+	}
+
+	// Free multipliers output
+	textBlockOutput->Text += "Free multipliers (B): \n";
+	for (i = 0; i < n; i++)
+	{
+		textBlockOutput->Text += b[i] + "\n";
+	}
+	textBlockOutput->Text += "\n";
+
+	eps = 0.000001;
+
+	// Check elements on the diagonal of the matrix for zeros
+	for (i = 0; i < n; i++)
+	{
+		if (A[i][i] == 0)
+		{
+			/*deleteMatrix(n, A);
+			delete[]X;
+			delete[]Xk;
+			delete[]b;*/ 
+
+			textBlockOutput->Text += "There is a zero on the main diagonal of the matrix \n";
+		}
+	}
+
+	// Set approximate solutions of the system
+	for (i = 0; i < n; i++)
+		X[i] = 0.0;
+
+	// Calculate results
+	int  count = 0, flag = 1;
+	double x, zh = 0;
+	for (i = 0; i < n; i++)
+		Xk[i] = X[i];
+	do
+	{
+		count++;
+		for (i = 0; i < n; i++)
+		{
+			x = 0;
+			for (j = 0; j < n; j++)
+			{
+				if (i != j)  x += Xk[j] * A[i][j];
+				if (i == j) zh = A[i][j];
+			}
+			x = (b[i] - x) / zh;
+			X[i] = x;
+			if ((fabs(X[i] - Xk[i])) <= eps) flag = 0;
+		}
+		for (i = 0; i < n; i++)
+			Xk[i] = X[i];
+	} while (flag);
+
+	// Output results
+	textBlockOutput->Text += "\n";
+	textBlockOutput->Text += "Results: \n";
+	for (i = 0; i < n; i++)
+	{
+		String^ currentXIndexPStr = i2ps(i + 1);
+		textBlockOutput->Text += "X" + currentXIndexPStr + " = " + X[i] + "; \n";
+	}
+		
+	String^ iterationsNum = i2ps(count);
+	textBlockOutput->Text += "The process of finding results took " + iterationsNum + " iterations \n";
+
+	deleteMatrix(n, A);
+	delete[] X;
+	delete[] Xk;
+	delete[] b;
+}
+
 void PowerSplit2::MainPage::CheckBoxClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	// clearing Vector checkBoxesActive before using it to avoid copying 
@@ -489,8 +610,8 @@ void PowerSplit2::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::
 	} 
 	else if (selectedCalculationMethod == "SI") 
 	{
-		//TODO: implementation
-		//equationMultipliers.clear();
+		simpleIterations();
+		equationMultipliers.clear();
 	} 
 	else if (selectedCalculationMethod == "GS") 
 	{
