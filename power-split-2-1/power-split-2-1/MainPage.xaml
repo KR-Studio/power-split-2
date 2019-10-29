@@ -116,7 +116,9 @@
                         <StackPanel Orientation="Vertical" Margin="10,10,10,10">
                             <TextBlock x:Name="textBlockAccessibleProcessors" Text="Accessible processor cores number: 0" TextWrapping="Wrap" FontSize="18" Height="50" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
                             <TextBlock x:Name="textBlockActiveProcessors" Text="Active processor cores by id: 0" TextWrapping="Wrap" FontSize="18" Height="50" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
-                            <TextBlock x:Name="textBlockOutput" Text="Area for computed results" TextWrapping="Wrap" FontSize="18" Height="418" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                            <ScrollViewer Height="418">
+                                <TextBlock x:Name="textBlockOutput" Text="Area for computed results" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                            </ScrollViewer>
                         </StackPanel>
                     </Border>
                 </StackPanel>

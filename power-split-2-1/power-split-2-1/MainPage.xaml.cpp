@@ -33,6 +33,8 @@ std::vector<int> checkBoxesActive = { 0 };
 std::vector<int> equationMultipliers = {};
 std::vector<double> averages;
 
+std::string selectedCalculationMethod;
+
 MainPage::MainPage()
 {
 	InitializeComponent();
@@ -143,6 +145,9 @@ void PowerSplit2::MainPage::Page_Loaded(Platform::Object^ sender, Windows::UI::X
 	default:
 		break;
 	}
+
+	// Disable 'Calculate' button until user selects any calculation method
+	calculateBtn->IsEnabled = false;
 }
 
 void buttonStateChange(Windows::UI::Xaml::Controls::Button^ btnName, bool state)
@@ -472,10 +477,26 @@ void PowerSplit2::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::
 	}
 
 	
-
-	//PowerSplit2::MainPage::gaussElimination();
-	PowerSplit2::MainPage::cramersRule();
-    
+	if (selectedCalculationMethod == "GE") 
+	{
+		gaussElimination();
+		equationMultipliers.clear();
+	} 
+	else if (selectedCalculationMethod == "CR") 
+	{
+		cramersRule();
+		equationMultipliers.clear();
+	} 
+	else if (selectedCalculationMethod == "SI") 
+	{
+		//TODO: implementation
+		//equationMultipliers.clear();
+	} 
+	else if (selectedCalculationMethod == "GS") 
+	{
+		//TODO: implementation
+		//equationMultipliers.clear();
+	}
  
 
 	//auto elementsNumPstr = textBoxArray->Text->ToString();
@@ -598,20 +619,25 @@ void PowerSplit2::MainPage::predefinedSetRBChecked(Platform::Object^ sender, Win
 
 void PowerSplit2::MainPage::calculationMethodRBChecked(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
+	if (!calculateBtn->IsEnabled) {
+		calculateBtn->IsEnabled = true;
+	}
+
 	textBlockOutput->Text += "\n";
 	if (gaussianEliminationButton->IsChecked->Value == true) {
-
+		selectedCalculationMethod = "GE";
+		textBlockOutput->Text += "Calculation method is set to Gaussian elimination";
 	}
 	else if (cramersRuleButton->IsChecked->Value == true) {
-
+		selectedCalculationMethod = "CR";
+		textBlockOutput->Text += "Calculation method is set to Cramer's rule";
 	}
 	else if (simpleIterationButton->IsChecked->Value == true) {
-
+		selectedCalculationMethod = "SI";
+		textBlockOutput->Text += "Calculation method is set to Simple-iteration method";
 	}
 	else if (gaussSeidelButton->IsChecked->Value == true) {
-
-	}
-	else {
-		// TODO: disable 'Calculate' button
+		selectedCalculationMethod = "GS";
+		textBlockOutput->Text += "Calculation method is set to Gauss–Seidel method";
 	}
 }
