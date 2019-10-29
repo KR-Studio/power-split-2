@@ -23,9 +23,13 @@ namespace PowerSplit2
 		void Button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void predefinedSetRBChecked(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void calculationMethodRBChecked(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void gaussElimination();
-		void cramersRule();
-		void simpleIterations();
-		void seidel();
+		void serialGaussElimination();
+		void serialCramersRule();
+		void serialSimpleIterations();
+		void serialSeidel();
+		void parallelGaussElimination();
+		void parallelCramersRule();
+		void parallelSimpleIterations();
+		void parallelSeidel();
 	};
 }

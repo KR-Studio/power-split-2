@@ -10,6 +10,7 @@
 #include <time.h>
 #include <bitset>
 #include <cmath>
+#include <random>
 
 using namespace PowerSplit2;
 
@@ -156,6 +157,14 @@ void buttonStateChange(Windows::UI::Xaml::Controls::Button^ btnName, bool state)
 	btnName->IsEnabled = state;
 }
 
+void syncData() 
+{
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<double> dist(1, std::nextafter(2, DBL_MAX));
+	Sleep(dist(mt));
+}
+
 void thread_average(int vol)
 {
 	std::vector<int> v(vol);
@@ -179,11 +188,12 @@ void deleteMatrix(int rows, double** matrix)
 	delete[] matrix;
 }
 
-void PowerSplit2::MainPage::gaussElimination()
+void PowerSplit2::MainPage::parallelGaussElimination()
 {
+	std::thread th([=] {});
 	int i, j, n, m;
-	
-	
+
+
 	n = N;
 	m = M;
 	double** matrix = new double* [n];
@@ -195,13 +205,86 @@ void PowerSplit2::MainPage::gaussElimination()
 	for (i = 0; i < n; i++) {
 		for (j = 0; j < m; j++)
 		{
-			
+
 
 			matrix[i][j] = equationMultipliers[j + pushedValues];
 		}
 		pushedValues += 5;
 	}
 
+
+
+	// Initial matrix output
+	textBlockOutput->Text = "Initial matrix: \n";
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < m; j++) {
+			textBlockOutput->Text += matrix[i][j] + " ";
+		}
+		textBlockOutput->Text += "\n";
+	}
+	textBlockOutput->Text += "\n";
+
+	// Gaussian elimination, forward elimination, getting upper-triangular matrix
+	double  tmp, * xx = new double[m];
+	int k;
+
+	for (i = 0; i < n; i++)
+	{
+		tmp = matrix[i][i];
+		for (j = n; j >= i; j--)
+			matrix[i][j] /= tmp;
+		for (j = i + 1; j < n; j++)
+		{
+			tmp = matrix[j][i];
+			for (k = n; k >= i; k--)
+				matrix[j][k] -= tmp * matrix[i][k];
+		}
+	}
+
+	// Reverse elimination, back-substitution
+	xx[n - 1] = matrix[n - 1][n];
+	for (i = n - 2; i >= 0; i--)
+	{
+		xx[i] = matrix[i][n];
+		for (j = i + 1; j < n; j++) xx[i] -= matrix[i][j] * xx[j];
+	}
+
+	// Output results
+	for (i = 0; i < n; i++)
+	{
+		String^ currentXIndexPStr = i2ps(i + 1);
+		textBlockOutput->Text += "X" + currentXIndexPStr + " = " + xx[i] + "; \n";
+	}
+	textBlockOutput->Text += "\n";
+
+	deleteMatrix(n, matrix);
+	th.join();
+}
+
+void PowerSplit2::MainPage::serialGaussElimination()
+{
+	int i, j, n, m;
+	
+	
+	n = N;
+	m = M;
+	double** matrix = new double* [n];
+	for (i = 0; i < n; i++)
+		matrix[i] = new double[m];
+	
+	// Matrix initialization
+	int pushedValues = 0;
+	for (i = 0; i < n; i++) {
+		for (j = 0; j < m; j++)
+		{
+			
+
+			matrix[i][j] = equationMultipliers[j + pushedValues];
+		}
+		pushedValues += 5;
+	}
+	
 		
 
 	// Initial matrix output
@@ -249,6 +332,7 @@ void PowerSplit2::MainPage::gaussElimination()
 	textBlockOutput->Text += "\n";
 
 	deleteMatrix(n, matrix);
+	syncData();
 }
 
 class SubMatrix {
@@ -358,7 +442,8 @@ std::vector<double> solveCramer(const std::vector<std::vector<double>>& equation
 	return solve(sm);
 }
 
-void PowerSplit2::MainPage::cramersRule() {
+void PowerSplit2::MainPage::parallelCramersRule() {
+	std::thread th([=] {});
 	std::vector<std::vector<double>> multipliersCramerRule = {};
 
 	int step = 0;
@@ -385,9 +470,179 @@ void PowerSplit2::MainPage::cramersRule() {
 		String^ currentXIndexPStr = i2ps(i + 1);
 		textBlockOutput->Text += "X" + currentXIndexPStr + " = " + solution[i] + "; \n";
 	}
+	th.join();
 }
 
-void PowerSplit2::MainPage::simpleIterations() {
+void PowerSplit2::MainPage::serialCramersRule() {
+	std::vector<std::vector<double>> multipliersCramerRule = {};
+
+	int step = 0;
+	for (int i = 0; i < equationMultipliers.size(); i += 5)
+	{
+		if (step <= 2) {
+			std::vector<double> sub(&equationMultipliers[i], &equationMultipliers[i + 5]);
+			multipliersCramerRule.emplace_back(sub);
+			step++;
+		}
+		else {
+			std::vector<double> sub(&equationMultipliers[i], &equationMultipliers[i + 4]);
+			sub.emplace_back(equationMultipliers[i + 4]);
+			multipliersCramerRule.emplace_back(sub);
+			step++;
+		}
+
+	}
+	
+	auto solution = solveCramer(multipliersCramerRule);
+	textBlockOutput->Text = "\n";
+	for (int i = 0; i < solution.size(); i++)
+	{
+		String^ currentXIndexPStr = i2ps(i + 1);
+		textBlockOutput->Text += "X" + currentXIndexPStr + " = " + solution[i] + "; \n";
+	}
+	syncData();
+}
+
+void PowerSplit2::MainPage::parallelSimpleIterations() {
+	std::thread th([=] {});
+	int i, j;
+	double** A;     //matrix of equation multipliers
+	double* X;      //global solution array
+	double* Xk;     //current iteration (k) solution array
+	double* b;      //array of free multipliers (the ones to the right side of the equations)
+	double sumd = 0; //additional variables for calculation
+	double eps; //precision
+
+	int n = N;
+
+
+	A = new double* [n];
+	X = new double[n];
+	Xk = new double[n];
+	b = new double[n];
+	for (i = 0; i < n; i++)
+	{
+		A[i] = new double[n];
+	}
+
+	// Fill matrix of equation multipliers with values
+	int pushedValues = 0;
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			A[i][j] = equationMultipliers[j + pushedValues];
+		}
+		pushedValues += 5;
+	}
+
+	// Initial matrix output
+	textBlockOutput->Text += "\n";
+	textBlockOutput->Text += "Initial matrix (without free multipliers): \n";
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++) {
+			textBlockOutput->Text += A[i][j] + " ";
+		}
+		textBlockOutput->Text += "\n";
+	}
+	textBlockOutput->Text += "\n";
+
+	// Fill array of free multipliers (the ones to the right side of the equations) with values
+	int initialBIndex = 4;
+	for (i = 0; i < n; i++) {
+		b[i] = equationMultipliers[initialBIndex];
+		initialBIndex += 5;
+	}
+
+	// Free multipliers output
+	textBlockOutput->Text += "Free multipliers (B): \n";
+	for (i = 0; i < n; i++)
+	{
+		textBlockOutput->Text += b[i] + "\n";
+	}
+	textBlockOutput->Text += "\n";
+
+	eps = 0.000001;
+
+	// Check elements on the diagonal of the matrix for zeros
+	for (i = 0; i < n; i++)
+	{
+		if (A[i][i] == 0)
+		{
+			/*deleteMatrix(n, A);
+			delete[]X;
+			delete[]Xk;
+			delete[]b;*/
+
+			textBlockOutput->Text += "There is a zero on the main diagonal of the matrix \n";
+		}
+	}
+
+	// Set approximate solutions of the system
+	for (i = 0; i < n; i++)
+		X[i] = 0.0;
+
+	// Calculate results
+	int  count = 0, flag = 1;
+	double x, g = 0;
+	for (i = 0; i < n; i++)
+		Xk[i] = X[i];
+	do
+	{
+		count++;
+		for (i = 0; i < n; i++)
+		{
+			x = 0;
+			for (j = 0; j < n; j++)
+			{
+				if (i != j)
+				{
+					x += Xk[j] * A[i][j];
+				}
+				if (i == j)
+				{
+					g = A[i][j];
+				}
+			}
+			x = (b[i] - x) / g;
+			X[i] = x;
+			if ((fabs(X[i] - Xk[i])) <= eps) {
+				flag = 0;
+			}
+		}
+
+		for (i = 0; i < n; i++)
+		{
+			Xk[i] = X[i];
+		}
+
+		if (count >= 35)
+		{
+			flag = NULL;
+		}
+	} while (flag);
+
+	// Output results
+	textBlockOutput->Text += "\n";
+	textBlockOutput->Text += "Results: \n";
+	for (i = 0; i < n; i++)
+	{
+		String^ currentXIndexPStr = i2ps(i + 1);
+		textBlockOutput->Text += "X" + currentXIndexPStr + " = " + X[i] + "; \n";
+	}
+
+	String^ iterationsNum = i2ps(count);
+	textBlockOutput->Text += "The process of finding results took " + iterationsNum + " iterations \n";
+
+	deleteMatrix(n, A);
+	delete[] X;
+	delete[] Xk;
+	delete[] b;
+	th.join();
+}
+
+void PowerSplit2::MainPage::serialSimpleIterations() {
 	int i, j;
 	double** A;     //matrix of equation multipliers
 	double* X;      //global solution array
@@ -522,10 +777,12 @@ void PowerSplit2::MainPage::simpleIterations() {
 	delete[] X;
 	delete[] Xk;
 	delete[] b;
+	syncData();
 }
 
-void PowerSplit2::MainPage::seidel()
+void PowerSplit2::MainPage::parallelSeidel()
 {
+	std::thread th([=] {});
 	double a[4][4], b[4], x[4], x_k[4], r[4];
 	int n = N;
 	double const e = 0.000001;
@@ -607,6 +864,95 @@ void PowerSplit2::MainPage::seidel()
 		textBlockOutput->Text += "X" + currentXIndexPStr + " = " + x[i] + "; \n";
 	};
 
+	String^ iterationsNum = i2ps(iteration);
+	textBlockOutput->Text += "The process of finding results took " + iterationsNum + " iterations \n";
+	th.join();
+}
+
+void PowerSplit2::MainPage::serialSeidel()
+{
+	double a[4][4], b[4], x[4], x_k[4], r[4];
+	int n = N;
+	double const e = 0.000001;
+
+	// a initialization - filling matrix of equation multipliers with values
+	int pushedValues = 0;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			a[i][j] = equationMultipliers[j + pushedValues];
+		}
+		pushedValues += 5;
+	}
+
+	// Initial matrix output
+	textBlockOutput->Text += "\n";
+	textBlockOutput->Text += "Initial matrix (without free multipliers): \n";
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++) {
+			textBlockOutput->Text += a[i][j] + " ";
+		}
+		textBlockOutput->Text += "\n";
+	}
+	textBlockOutput->Text += "\n";
+
+	// b initialization - filling array of free multipliers (the ones to the right side of the equations) with values
+	int initialBIndex = 4;
+	for (int i = 0; i < n; i++) {
+		b[i] = equationMultipliers[initialBIndex];
+		initialBIndex += 5;
+	}
+
+	// Free multipliers output
+	textBlockOutput->Text += "Free multipliers (B): \n";
+	for (int i = 0; i < n; i++)
+	{
+		textBlockOutput->Text += b[i] + "\n";
+	}
+	textBlockOutput->Text += "\n";
+
+	double max = 404505.3;
+	int iteration = 0;
+	while (max > e)
+	{
+		x_k[0] = (b[0] - x[1] * a[0][1] - x[2] * a[0][2] - x[3] * a[0][3]) / a[0][0];
+		x_k[1] = (b[1] - x_k[0] * a[1][0] - x[2] * a[1][2] - x[3] * a[1][3]) / a[1][1];
+		x_k[2] = (b[2] - x_k[0] * a[2][0] - x_k[1] * a[2][1] - x[3] * a[2][3]) / a[2][2];
+		x_k[3] = (b[3] - x_k[0] * a[3][0] - x_k[1] * a[3][1] - x_k[2] * a[3][2]) / a[3][3];
+
+		max = abs(x_k[0] - x[0]);
+		for (int i = 1; i < n; i++)
+		{
+			if (abs(x_k[i] - x[i]) > max)
+			{
+				max = abs(x_k[i] - x[i]);
+			}
+		};
+
+		for (int i = 0; i < n; i++)
+		{
+			x[i] = x_k[i];
+
+			r[i] = b[i] - a[i][0] * x[0] - a[i][1] * x[1] - a[i][2] * x[2] - a[i][3] * x[3];
+			/*String ^ currentXIndexPStr = i2ps(i + 1);
+			textBlockOutput->Text += "X" + currentXIndexPStr + " = " + r[i] + "; \n";*/
+		};
+		/*textBlockOutput->Text += "End of iteration #" + iteration + "\n";
+		textBlockOutput->Text += "\n";*/
+		iteration++;
+	};
+	
+
+	textBlockOutput->Text += "Final result: " + "\n";
+
+	for (int i = 0; i < n; i++)
+	{
+		String^ currentXIndexPStr = i2ps(i + 1);
+		textBlockOutput->Text += "X" + currentXIndexPStr + " = " + x[i] + "; \n";
+	};
+	syncData();
 	String^ iterationsNum = i2ps(iteration);
 	textBlockOutput->Text += "The process of finding results took " + iterationsNum + " iterations \n";
 }
@@ -704,35 +1050,52 @@ void PowerSplit2::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::
 	
 	if (selectedCalculationMethod == "GE") 
 	{
-		gaussElimination();
+		if (calculationModeToggle->IsOn == true) 
+		{
+			parallelGaussElimination();
+		}
+		else 
+		{
+			serialGaussElimination();
+		}
 		equationMultipliers.clear();
 	} 
 	else if (selectedCalculationMethod == "CR") 
 	{
-		cramersRule();
+		if (calculationModeToggle->IsOn == true)
+		{
+			parallelCramersRule();
+		}
+		else
+		{
+			serialCramersRule();
+		}
 		equationMultipliers.clear();
 	} 
 	else if (selectedCalculationMethod == "SI") 
 	{
-		simpleIterations();
+		if (calculationModeToggle->IsOn == true)
+		{
+			parallelSimpleIterations();
+		}
+		else
+		{
+			serialSimpleIterations();
+		}
 		equationMultipliers.clear();
 	} 
 	else if (selectedCalculationMethod == "GS") 
 	{
-		seidel();
+		if (calculationModeToggle->IsOn == true)
+		{
+			parallelSeidel();
+		}
+		else
+		{
+			serialSeidel();
+		}
 		equationMultipliers.clear();
 	}
- 
-
-	//auto elementsNumPstr = textBoxArray->Text->ToString();
-	//std::wstring elementsNumPstrWstr(elementsNumPstr->Data());
-	//int elementsNum = std::stoi(elementsNumPstrWstr);
-
-	//auto partsNumPstr = textBoxThreads->Text->ToString();
-	//std::wstring partsNumPstrWstr(partsNumPstr->Data());
-	//int partsNum = std::stoi(partsNumPstrWstr);
-
-	
 
 	//std::vector<std::thread> threads;
 
@@ -748,14 +1111,6 @@ void PowerSplit2::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::
 	//for (auto& thread : threads) {
 	//	thread.join();
 	//}
-
-	//double globalAverage = std::accumulate(averages.begin(), averages.end(), 0.0) / averages.size();
-
-	//// Convert calculated average to Platform::String and output it
-	//std::string averageStr = "Average: " + std::to_string(globalAverage);
-	//std::wstring averageWstr = s2ws(averageStr);
-	//String^ averagePstr = ref new String(averageWstr.c_str());
-	//textBlockOutput->Text = averagePstr;
 
 
 	//Output execution time
