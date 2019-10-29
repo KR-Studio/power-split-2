@@ -24,5 +24,6 @@ namespace PowerSplit2
 		void gaussElimination();
 		void cramersRule();
 		void predefinedSetRBChecked(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void calculationMethodRBChecked(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 	};
 }

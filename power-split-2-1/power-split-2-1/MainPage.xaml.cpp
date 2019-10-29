@@ -525,7 +525,7 @@ void PowerSplit2::MainPage::predefinedSetRBChecked(Platform::Object^ sender, Win
 {
 	textBlockOutput->Text = "\n";
 	if (GEPSButton->IsChecked->Value == true) {
-		textBlockOutput->Text += "Gaussian elimination predefined set is selected";
+		textBlockOutput->Text += "Gaussian elimination predefined set is selected \n";
 		textBoxRow1X1Multiplier->Text = s2ps("10");
 		textBoxRow1X2Multiplier->Text = s2ps("-5");
 		textBoxRow1X3Multiplier->Text = s2ps("1");
@@ -548,7 +548,7 @@ void PowerSplit2::MainPage::predefinedSetRBChecked(Platform::Object^ sender, Win
 		textBoxRow4BMultiplier->Text = s2ps("6");
 	}
 	else if (CRPSButton->IsChecked->Value == true) {
-		textBlockOutput->Text += "Cramer's rule predefined set is selected";
+		textBlockOutput->Text += "Cramer's rule predefined set is selected \n";
 		textBoxRow1X1Multiplier->Text = s2ps("18");
 		textBoxRow1X2Multiplier->Text = s2ps("5");
 		textBoxRow1X3Multiplier->Text = s2ps("-10");
@@ -571,7 +571,7 @@ void PowerSplit2::MainPage::predefinedSetRBChecked(Platform::Object^ sender, Win
 		textBoxRow4BMultiplier->Text = s2ps("-13");
 	}
 	else {
-		textBlockOutput->Text += "Custom multiplier input mode is selected";
+		textBlockOutput->Text += "Custom multiplier input mode is selected \n";
 		textBoxRow1X1Multiplier->Text = s2ps("");
 		textBoxRow1X2Multiplier->Text = s2ps("");
 		textBoxRow1X3Multiplier->Text = s2ps("");
@@ -592,5 +592,26 @@ void PowerSplit2::MainPage::predefinedSetRBChecked(Platform::Object^ sender, Win
 		textBoxRow4X3Multiplier->Text = s2ps("");
 		textBoxRow4X4Multiplier->Text = s2ps("");
 		textBoxRow4BMultiplier->Text = s2ps("");
+	}
+}
+
+
+void PowerSplit2::MainPage::calculationMethodRBChecked(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+	textBlockOutput->Text += "\n";
+	if (gaussianEliminationButton->IsChecked->Value == true) {
+
+	}
+	else if (cramersRuleButton->IsChecked->Value == true) {
+
+	}
+	else if (simpleIterationButton->IsChecked->Value == true) {
+
+	}
+	else if (gaussSeidelButton->IsChecked->Value == true) {
+
+	}
+	else {
+		// TODO: disable 'Calculate' button
 	}
 }
