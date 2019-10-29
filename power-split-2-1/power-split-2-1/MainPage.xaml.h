@@ -21,6 +21,7 @@ namespace PowerSplit2
 		void Page_Loaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void CheckBoxClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void Button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void gauss_elimination();
+		void gaussElimination();
+		void cramersRule();
 	};
 }
