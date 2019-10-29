@@ -393,7 +393,7 @@ void PowerSplit2::MainPage::CheckBoxClick(Platform::Object^ sender, Windows::UI:
 	String^ checkBoxesActiveText = "";
 
 	// checking active processors
-	for each (CheckBox ^ checkBox in checkBoxes)
+	for each (CheckBox^ checkBox in checkBoxes)
 	{
 		if (checkBox->IsChecked->Value == true) {
 			// change checkBox->Content dataType from String^ to int
@@ -459,9 +459,8 @@ void PowerSplit2::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::
 	// Array with TextBox^ multiplierTextBoxes
 	TextBox^ multiplierTextBoxes[] = { textBoxRow1X1Multiplier, textBoxRow1X2Multiplier, textBoxRow1X3Multiplier, textBoxRow1X4Multiplier, textBoxRow1BMultiplier, textBoxRow2X1Multiplier, textBoxRow2X2Multiplier, textBoxRow2X3Multiplier, textBoxRow2X4Multiplier, textBoxRow2BMultiplier, textBoxRow3X1Multiplier, textBoxRow3X2Multiplier, textBoxRow3X3Multiplier, textBoxRow3X4Multiplier, textBoxRow3BMultiplier, textBoxRow4X1Multiplier, textBoxRow4X2Multiplier, textBoxRow4X3Multiplier, textBoxRow4X4Multiplier, textBoxRow4BMultiplier};
 
-
 	// checking equation multipliers
-	for each (TextBox ^ multiplierTextBox in multiplierTextBoxes)
+	for each (TextBox^ multiplierTextBox in multiplierTextBoxes)
 	{
 		// change multiplierTextBox->Text from String^ to int
 		auto multiplierTextBoxContentPStr = multiplierTextBox->Text->ToString();
@@ -471,6 +470,8 @@ void PowerSplit2::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::
 		// inserting multiplier values into equation multipliers vector
 		equationMultipliers.emplace_back(multiplier);
 	}
+
+	
 
 	//PowerSplit2::MainPage::gaussElimination();
 	PowerSplit2::MainPage::cramersRule();
@@ -517,4 +518,79 @@ void PowerSplit2::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::
 	std::wstring execTimeWstr = s2ws(execTimeStr);
 	String^ execTimePstr = ref new String(execTimeWstr.c_str());
 	textBlockOutput->Text += execTimePstr;
+}
+
+
+void PowerSplit2::MainPage::predefinedSetRBChecked(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+	textBlockOutput->Text = "\n";
+	if (GEPSButton->IsChecked->Value == true) {
+		textBlockOutput->Text += "Gaussian elimination predefined set is selected";
+		textBoxRow1X1Multiplier->Text = s2ps("10");
+		textBoxRow1X2Multiplier->Text = s2ps("-5");
+		textBoxRow1X3Multiplier->Text = s2ps("1");
+		textBoxRow1X4Multiplier->Text = s2ps("5");
+		textBoxRow1BMultiplier->Text = s2ps("21");
+		textBoxRow2X1Multiplier->Text = s2ps("2");
+		textBoxRow2X2Multiplier->Text = s2ps("30");
+		textBoxRow2X3Multiplier->Text = s2ps("-21");
+		textBoxRow2X4Multiplier->Text = s2ps("5");
+		textBoxRow2BMultiplier->Text = s2ps("6");
+		textBoxRow3X1Multiplier->Text = s2ps("2");
+		textBoxRow3X2Multiplier->Text = s2ps("-8");
+		textBoxRow3X3Multiplier->Text = s2ps("23");
+		textBoxRow3X4Multiplier->Text = s2ps("12");
+		textBoxRow3BMultiplier->Text = s2ps("5");
+		textBoxRow4X1Multiplier->Text = s2ps("2");
+		textBoxRow4X2Multiplier->Text = s2ps("-8");
+		textBoxRow4X3Multiplier->Text = s2ps("-2");
+		textBoxRow4X4Multiplier->Text = s2ps("-14");
+		textBoxRow4BMultiplier->Text = s2ps("6");
+	}
+	else if (CRPSButton->IsChecked->Value == true) {
+		textBlockOutput->Text += "Cramer's rule predefined set is selected";
+		textBoxRow1X1Multiplier->Text = s2ps("18");
+		textBoxRow1X2Multiplier->Text = s2ps("5");
+		textBoxRow1X3Multiplier->Text = s2ps("-10");
+		textBoxRow1X4Multiplier->Text = s2ps("7");
+		textBoxRow1BMultiplier->Text = s2ps("14");
+		textBoxRow2X1Multiplier->Text = s2ps("1");
+		textBoxRow2X2Multiplier->Text = s2ps("5");
+		textBoxRow2X3Multiplier->Text = s2ps("3");
+		textBoxRow2X4Multiplier->Text = s2ps("-12");
+		textBoxRow2BMultiplier->Text = s2ps("15");
+		textBoxRow3X1Multiplier->Text = s2ps("3");
+		textBoxRow3X2Multiplier->Text = s2ps("-2");
+		textBoxRow3X3Multiplier->Text = s2ps("2");
+		textBoxRow3X4Multiplier->Text = s2ps("-9");
+		textBoxRow3BMultiplier->Text = s2ps("19");
+		textBoxRow4X1Multiplier->Text = s2ps("1");
+		textBoxRow4X2Multiplier->Text = s2ps("-2");
+		textBoxRow4X3Multiplier->Text = s2ps("-15");
+		textBoxRow4X4Multiplier->Text = s2ps("9");
+		textBoxRow4BMultiplier->Text = s2ps("-13");
+	}
+	else {
+		textBlockOutput->Text += "Custom multiplier input mode is selected";
+		textBoxRow1X1Multiplier->Text = s2ps("");
+		textBoxRow1X2Multiplier->Text = s2ps("");
+		textBoxRow1X3Multiplier->Text = s2ps("");
+		textBoxRow1X4Multiplier->Text = s2ps("");
+		textBoxRow1BMultiplier->Text = s2ps("");
+		textBoxRow2X1Multiplier->Text = s2ps("");
+		textBoxRow2X2Multiplier->Text = s2ps("");
+		textBoxRow2X3Multiplier->Text = s2ps("");
+		textBoxRow2X4Multiplier->Text = s2ps("");
+		textBoxRow2BMultiplier->Text = s2ps("");
+		textBoxRow3X1Multiplier->Text = s2ps("");
+		textBoxRow3X2Multiplier->Text = s2ps("");
+		textBoxRow3X3Multiplier->Text = s2ps("");
+		textBoxRow3X4Multiplier->Text = s2ps("");
+		textBoxRow3BMultiplier->Text = s2ps("");
+		textBoxRow4X1Multiplier->Text = s2ps("");
+		textBoxRow4X2Multiplier->Text = s2ps("");
+		textBoxRow4X3Multiplier->Text = s2ps("");
+		textBoxRow4X4Multiplier->Text = s2ps("");
+		textBoxRow4BMultiplier->Text = s2ps("");
+	}
 }

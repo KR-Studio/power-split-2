@@ -41,7 +41,14 @@
                         </StackPanel>
                     </StackPanel>
                     <ToggleSwitch x:Name="calculationModeToggle" Header="Parallel computing mode" FontSize="22" IsOn="True"></ToggleSwitch>
-                    <TextBlock HorizontalAlignment="Left" Text="Input multipliers for simultaneous linear algebraic equations:" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,20"/>
+                    <StackPanel  Orientation="Horizontal" Margin="0,0,0,20">
+                        <TextBlock HorizontalAlignment="Left" Text="Input (or select predefined) multipliers for SLAE:" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="GEPSButton" Content="GEPS" GroupName="predefinedSetsGroup" Margin="10,0,0,0" Checked="predefinedSetRBChecked"/>
+                            <RadioButton x:Name="CRPSButton" Content="CRPS" GroupName="predefinedSetsGroup" Margin="0,0,0,0" Checked="predefinedSetRBChecked"></RadioButton>
+                            <RadioButton x:Name="customButton" Content="Custom" GroupName="predefinedSetsGroup" Margin="0,0,0,0" Checked="predefinedSetRBChecked"></RadioButton>
+                        </StackPanel>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Vertical" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" RequestedTheme="Default">
                             <Image Source="/Assets/Left_curly_bracket.png" Width="70" Height="226" Stretch="Uniform" Margin="0,0,0,0"></Image>
@@ -95,10 +102,10 @@
                     </StackPanel>
                     <TextBlock HorizontalAlignment="Left" Text="Select calculation method:" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,20,0,0"/>
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                        <RadioButton x:Name="radioButton1" Content="Gaussian elimination" GroupName="methodsGroup" Margin="10,0,10,0"></RadioButton>
-                        <RadioButton x:Name="radioButton2" Content="Cramer`s rule" GroupName="methodsGroup" Margin="10,0,10,0"></RadioButton>
-                        <RadioButton x:Name="radioButton3" Content="Simple-iteration method" GroupName="methodsGroup" Margin="10,0,10,0"></RadioButton>
-                        <RadioButton x:Name="radioButton4" Content="Gauss–Seidel method" GroupName="methodsGroup" Margin="10,0,10,0"></RadioButton>
+                        <RadioButton x:Name="gaussianEliminationButton" Content="Gaussian elimination" GroupName="methodsGroup" Margin="10,0,10,0"></RadioButton>
+                        <RadioButton x:Name="cramersRuleButton" Content="Cramer`s rule" GroupName="methodsGroup" Margin="10,0,10,0"></RadioButton>
+                        <RadioButton x:Name="simpleIterationButton" Content="Simple-iteration method" GroupName="methodsGroup" Margin="10,0,10,0"></RadioButton>
+                        <RadioButton x:Name="gaussSeidelButton" Content="Gauss–Seidel method" GroupName="methodsGroup" Margin="10,0,10,0"></RadioButton>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                         <Button x:Name="calculateBtn" Content="Calculate" Width="628" FontSize="22" Margin="90,0,0,0" Click="Button_Click"/>
