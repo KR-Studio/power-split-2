@@ -33,7 +33,6 @@ using namespace Windows::UI::Xaml::Navigation;
 // Vector with ids of processors that have activeState in checkBoxes
 std::vector<int> checkBoxesActive = { 0 };
 std::vector<int> equationMultipliers = {};
-std::vector<double> averages;
 
 std::string selectedCalculationMethod;
 
@@ -163,14 +162,6 @@ void syncData()
 	std::mt19937 mt(rd());
 	std::uniform_real_distribution<double> dist(1, std::nextafter(2, DBL_MAX));
 	Sleep(dist(mt));
-}
-
-void thread_average(int vol)
-{
-	std::vector<int> v(vol);
-	std::generate(v.begin(), v.end(), std::rand);
-	double average = std::accumulate(v.begin(), v.end(), 0.0) / v.size();
-	averages.push_back(average);
 }
 
 /*
@@ -1084,7 +1075,7 @@ void PowerSplit2::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::
 		}
 		equationMultipliers.clear();
 	} 
-	else if (selectedCalculationMethod == "GS") 
+	else if (selectedCalculationMethod == "S") 
 	{
 		if (calculationModeToggle->IsOn == true)
 		{
@@ -1096,22 +1087,6 @@ void PowerSplit2::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::
 		}
 		equationMultipliers.clear();
 	}
-
-	//std::vector<std::thread> threads;
-
-	//for (int c = 0; c <= partsNum; c++) {
-	//	if (c == partsNum && remainderFlag == 1) {
-	//		partVolume = elementsNum - ((std::floor(elementsNum / partsNum)) * partsNum);
-	//	}
-
-	//	std::thread thr(thread_average, partVolume);
-	//	threads.emplace_back(std::move(thr));
-	//}
-
-	//for (auto& thread : threads) {
-	//	thread.join();
-	//}
-
 
 	//Output execution time
 	double execTime = (double)(clock() - tStart) / CLOCKS_PER_SEC;
@@ -1217,7 +1192,7 @@ void PowerSplit2::MainPage::calculationMethodRBChecked(Platform::Object^ sender,
 		textBlockOutput->Text += "Calculation method is set to Simple-iteration method";
 	}
 	else if (seidelButton->IsChecked->Value == true) {
-		selectedCalculationMethod = "GS";
+		selectedCalculationMethod = "S";
 		textBlockOutput->Text += "Calculation method is set to Seidel method";
 	}
 }
