@@ -115,6 +115,12 @@ void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::U
 }
 
 
+void PowerSplitClient::MainPage::RandomButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}
+
+
 void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	// Check active connection with server
@@ -266,7 +272,7 @@ void PowerSplitClient::MainPage::DisconnectButtonClick(Platform::Object^ sender,
 }
 
 
-void PowerSplitClient::MainPage::StartTask1Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+void PowerSplitClient::MainPage::SendButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	// Check active connection with server
 	if (ifConnected == NetResult::Net_NotYetImplemented)
@@ -323,7 +329,7 @@ void PowerSplitClient::MainPage::StartTask1Click(Platform::Object^ sender, Windo
 			{
 				packetReceived >> messageNumberReceived >> messageDataSizeReceived >> messageDataReceived >> rectangleSquare >> rectanglesSquare;
 			}
-			catch (NetPacketException& exception)
+			catch (NetPacketException & exception)
 			{
 				std::string outputDataStr = exception.ToString() + "\r\n";
 				textBlockComputingOutput->Text += s2ps(outputDataStr);
@@ -345,244 +351,7 @@ void PowerSplitClient::MainPage::StartTask1Click(Platform::Object^ sender, Windo
 }
 
 
-void PowerSplitClient::MainPage::StartTask2Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-	// Check active connection with server
-	if (ifConnected == NetResult::Net_NotYetImplemented)
-	{
-		std::string dataStr = "Please first connect to server\r\n";
-		textBlockInfoOutput->Text += s2ps(dataStr);
-	}
-	else
-	{
-		// Prepare sending data
-		uint32_t rectangleHeight, rectangleWidth;
-		uint32_t messageNumberToSend, messageDataSizeToSend;
-		std::string messageDataToSend;
-		rectangleHeight = 160;
-		rectangleWidth = 60;
-		messageDataToSend = "Black";
-		messageNumberToSend = ++numberOfMessage;
-		messageDataSizeToSend = messageDataToSend.size();
-		NetPacket packetToSend;
-		packetToSend << messageNumberToSend << messageDataSizeToSend << messageDataToSend << rectangleHeight << rectangleWidth;
-
-		// Send the prepared packet with data
-		NetResult resultSent = NetResult::Net_Success;
-		while (resultSent == NetResult::Net_Success)
-		{
-			std::string outputDataStr = "Attempting to send set of data...\r\n";
-			textBlockInfoOutput->Text += s2ps(outputDataStr);
-
-			resultSent = socketListener.Send(packetToSend);
-			if (resultSent != NetResult::Net_Success)
-				break;
-
-			outputDataStr = "Data has been sent to server\r\n";
-			textBlockInfoOutput->Text += s2ps(outputDataStr);
-			break;
-		}
-
-		// Wait for response data from server
-		uint32_t messageNumberReceived, messageDataSizeReceived;
-		uint32_t rectangleSquare, rectanglesSquare;
-		std::string rectangleSquareStr, rectanglesSquareStr;
-		std::string messageDataReceived;
-		NetPacket packetReceived;
-		NetResult resultReceived = NetResult::Net_Success;
-		while (resultReceived == NetResult::Net_Success)
-		{
-			resultReceived = socketListener.Receive(packetReceived);
-			if (resultReceived != NetResult::Net_Success)
-				break;
-
-			std::string outputDataStr = "Data received:\r\n";
-			textBlockComputingOutput->Text += s2ps(outputDataStr);
-			try
-			{
-				packetReceived >> messageNumberReceived >> messageDataSizeReceived >> messageDataReceived >> rectangleSquare >> rectanglesSquare;
-			}
-			catch (NetPacketException& exception)
-			{
-				std::string outputDataStr = exception.ToString() + "\r\n";
-				textBlockComputingOutput->Text += s2ps(outputDataStr);
-			}
-
-			rectangleSquareStr = std::to_string(rectangleSquare);
-			rectanglesSquareStr = std::to_string(rectanglesSquare);
-
-			/*taskControl2Square->Text = s2ps(rectangleSquareStr);
-			generalSquareValue->Text = s2ps(rectanglesSquareStr);*/
-
-			outputDataStr = std::to_string(messageNumberReceived) + " " + std::to_string(messageDataSizeReceived) + " " + rectangleSquareStr + " " + rectanglesSquareStr + " " + messageDataReceived + "\r\n";
-			textBlockComputingOutput->Text += s2ps(outputDataStr);
-			break;
-		}
-		std::string outputDataStr = "Data has just been received from the server\r\n";
-		textBlockInfoOutput->Text += s2ps(outputDataStr);
-	}
-}
-
-
-void PowerSplitClient::MainPage::StartTask3Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-	// Check active connection with server
-	if (ifConnected == NetResult::Net_NotYetImplemented)
-	{
-		std::string dataStr = "Please first connect to server\r\n";
-		textBlockInfoOutput->Text += s2ps(dataStr);
-	}
-	else
-	{
-		// Prepare sending data
-		uint32_t rectangleHeight, rectangleWidth;
-		uint32_t messageNumberToSend, messageDataSizeToSend;
-		std::string messageDataToSend;
-		rectangleHeight = 130;
-		rectangleWidth = 40;
-		messageDataToSend = "Blue";
-		messageNumberToSend = ++numberOfMessage;
-		messageDataSizeToSend = messageDataToSend.size();
-		NetPacket packetToSend;
-		packetToSend << messageNumberToSend << messageDataSizeToSend << messageDataToSend << rectangleHeight << rectangleWidth;
-
-		// Send the prepared packet with data
-		NetResult resultSent = NetResult::Net_Success;
-		while (resultSent == NetResult::Net_Success)
-		{
-			std::string outputDataStr = "Attempting to send set of data...\r\n";
-			textBlockInfoOutput->Text += s2ps(outputDataStr);
-
-			resultSent = socketListener.Send(packetToSend);
-			if (resultSent != NetResult::Net_Success)
-				break;
-
-			outputDataStr = "Data has been sent to server\r\n";
-			textBlockInfoOutput->Text += s2ps(outputDataStr);
-			break;
-		}
-
-		// Wait for response data from server
-		uint32_t messageNumberReceived, messageDataSizeReceived;
-		uint32_t rectangleSquare, rectanglesSquare;
-		std::string rectangleSquareStr, rectanglesSquareStr;
-		std::string messageDataReceived;
-		NetPacket packetReceived;
-		NetResult resultReceived = NetResult::Net_Success;
-		while (resultReceived == NetResult::Net_Success)
-		{
-			resultReceived = socketListener.Receive(packetReceived);
-			if (resultReceived != NetResult::Net_Success)
-				break;
-
-			std::string outputDataStr = "Data received:\r\n";
-			textBlockComputingOutput->Text += s2ps(outputDataStr);
-			try
-			{
-				packetReceived >> messageNumberReceived >> messageDataSizeReceived >> messageDataReceived >> rectangleSquare >> rectanglesSquare;
-			}
-			catch (NetPacketException& exception)
-			{
-				std::string outputDataStr = exception.ToString() + "\r\n";
-				textBlockComputingOutput->Text += s2ps(outputDataStr);
-			}
-
-			rectangleSquareStr = std::to_string(rectangleSquare);
-			rectanglesSquareStr = std::to_string(rectanglesSquare);
-
-			/*taskControl3Square->Text = s2ps(rectangleSquareStr);
-			generalSquareValue->Text = s2ps(rectanglesSquareStr);*/
-
-			outputDataStr = std::to_string(messageNumberReceived) + " " + std::to_string(messageDataSizeReceived) + " " + rectangleSquareStr + " " + rectanglesSquareStr + " " + messageDataReceived + "\r\n";
-			textBlockComputingOutput->Text += s2ps(outputDataStr);
-			break;
-		}
-		std::string outputDataStr = "Data has just been received from the server\r\n";
-		textBlockInfoOutput->Text += s2ps(outputDataStr);
-	}
-}
-
-
-void PowerSplitClient::MainPage::StartTask4Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-	// Check active connection with server
-	if (ifConnected == NetResult::Net_NotYetImplemented)
-	{
-		std::string dataStr = "Please first connect to server\r\n";
-		textBlockInfoOutput->Text += s2ps(dataStr);
-	}
-	else
-	{
-		// Prepare sending data
-		uint32_t rectangleHeight, rectangleWidth;
-		uint32_t messageNumberToSend, messageDataSizeToSend;
-		std::string messageDataToSend;
-		rectangleHeight = 140;
-		rectangleWidth = 50;
-		messageDataToSend = "Green";
-		messageNumberToSend = ++numberOfMessage;
-		messageDataSizeToSend = messageDataToSend.size();
-		NetPacket packetToSend;
-		packetToSend << messageNumberToSend << messageDataSizeToSend << messageDataToSend << rectangleHeight << rectangleWidth;
-
-		// Send the prepared packet with data
-		NetResult resultSent = NetResult::Net_Success;
-		while (resultSent == NetResult::Net_Success)
-		{
-			std::string outputDataStr = "Attempting to send set of data...\r\n";
-			textBlockInfoOutput->Text += s2ps(outputDataStr);
-
-			resultSent = socketListener.Send(packetToSend);
-			if (resultSent != NetResult::Net_Success)
-				break;
-
-			outputDataStr = "Data has been sent to server\r\n";
-			textBlockInfoOutput->Text += s2ps(outputDataStr);
-			break;
-		}
-
-		// Wait for response data from server
-		uint32_t messageNumberReceived, messageDataSizeReceived;
-		uint32_t rectangleSquare, rectanglesSquare;
-		std::string rectangleSquareStr, rectanglesSquareStr;
-		std::string messageDataReceived;
-		NetPacket packetReceived;
-		NetResult resultReceived = NetResult::Net_Success;
-		while (resultReceived == NetResult::Net_Success)
-		{
-			resultReceived = socketListener.Receive(packetReceived);
-			if (resultReceived != NetResult::Net_Success)
-				break;
-
-			std::string outputDataStr = "Data received:\r\n";
-			textBlockComputingOutput->Text += s2ps(outputDataStr);
-			try
-			{
-				packetReceived >> messageNumberReceived >> messageDataSizeReceived >> messageDataReceived >> rectangleSquare >> rectanglesSquare;
-			}
-			catch (NetPacketException& exception)
-			{
-				std::string outputDataStr = exception.ToString() + "\r\n";
-				textBlockComputingOutput->Text += s2ps(outputDataStr);
-			}
-
-			rectangleSquareStr = std::to_string(rectangleSquare);
-			rectanglesSquareStr = std::to_string(rectanglesSquare);
-
-			/*taskControl4Square->Text = s2ps(rectangleSquareStr);
-			generalSquareValue->Text = s2ps(rectanglesSquareStr);*/
-
-			outputDataStr = std::to_string(messageNumberReceived) + " " + std::to_string(messageDataSizeReceived) + " " + rectangleSquareStr + " " + rectanglesSquareStr + " " + messageDataReceived + "\r\n";
-			textBlockComputingOutput->Text += s2ps(outputDataStr);
-			break;
-		}
-		std::string outputDataStr = "Data has just been received from the server\r\n";
-		textBlockInfoOutput->Text += s2ps(outputDataStr);
-	}
-}
-
-
-void PowerSplitClient::MainPage::SendButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+void PowerSplitClient::MainPage::SizeButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 
 }

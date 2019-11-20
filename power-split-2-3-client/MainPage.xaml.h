@@ -20,11 +20,9 @@ namespace PowerSplitClient
 	private:
 		void ConnectButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void DisconnectButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void StartTask1Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void StartTask2Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void StartTask3Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void StartTask4Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void SendButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void RandomButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void SizeButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 	};
 }
