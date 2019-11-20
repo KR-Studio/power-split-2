@@ -580,3 +580,9 @@ void PowerSplitClient::MainPage::StartTask4Click(Platform::Object^ sender, Windo
 		textBlockInfoOutput->Text += s2ps(outputDataStr);
 	}
 }
+
+
+void PowerSplitClient::MainPage::SendButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}

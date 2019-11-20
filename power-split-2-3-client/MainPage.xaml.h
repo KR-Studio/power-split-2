@@ -25,5 +25,6 @@ namespace PowerSplitClient
 		void StartTask3Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void StartTask4Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void SendButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 	};
 }
