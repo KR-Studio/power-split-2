@@ -7,6 +7,7 @@
 #include "MainPage.xaml.h"
 #include <string>
 #include <sstream>
+#include <ctime>
 
 #include <power-split-net/Including.h>
 
@@ -113,6 +114,11 @@ TextBlock^ InfoOutput;
 
 // Matrix/Vector Max Size
 const int maxSize = 5;
+// Matrix/Vector current Size
+int currentSize = maxSize;
+// Matrix/Vector Max Random Range
+const int maxRandomRange = 10000;
+
 
 // Matrix A - TextBoxes
 std::vector<std::vector<TextBox^>> matrix1Box;
@@ -209,7 +215,7 @@ void PrintInput() {
 }
 
 
-void FillInputWithZeros(int size = maxSize) {
+void FillInputWithZeros(int size = currentSize) {
 
 	matrix1.clear();
 	int i = 0;
@@ -385,6 +391,134 @@ void FillInputWithZeros(int size = maxSize) {
 }
 
 
+void RandomizeInput(int range = maxRandomRange) {
+
+	srand(time(0));
+
+	for (std::vector<std::vector<int>>::iterator matrixRowItt = matrix1.begin(); matrixRowItt != matrix1.end(); ++matrixRowItt) {
+		std::vector<int> &matrixRow = *matrixRowItt;
+		for (std::vector<int>::iterator matrixIndexItt = matrixRow.begin(); matrixIndexItt != matrixRow.end(); ++matrixIndexItt) {
+			*matrixIndexItt = rand() % range;
+		}
+	}
+
+	for (std::vector<std::vector<int>>::iterator matrixRowItt = matrix2.begin(); matrixRowItt != matrix2.end(); ++matrixRowItt) {
+		std::vector<int>& matrixRow = *matrixRowItt;
+		for (std::vector<int>::iterator matrixIndexItt = matrixRow.begin(); matrixIndexItt != matrixRow.end(); ++matrixIndexItt) {
+			*matrixIndexItt = rand() % range;
+		}
+	}
+
+	for (std::vector<int>::iterator matrixRowItt = vector1.begin(); matrixRowItt != vector1.end(); ++matrixRowItt) {
+		*matrixRowItt = rand() % range;
+	}
+
+	for (std::vector<int>::iterator matrixRowItt = vector2.begin(); matrixRowItt != vector2.end(); ++matrixRowItt) {
+		*matrixRowItt = rand() % range;
+	}
+
+	for (std::vector<std::vector<int>>::iterator matrixRowItt = matrix3.begin(); matrixRowItt != matrix3.end(); ++matrixRowItt) {
+		std::vector<int>& matrixRow = *matrixRowItt;
+		for (std::vector<int>::iterator matrixIndexItt = matrixRow.begin(); matrixIndexItt != matrixRow.end(); ++matrixIndexItt) {
+			*matrixIndexItt = rand() % range;
+		}
+	}
+
+	for (std::vector<std::vector<int>>::iterator matrixRowItt = matrix4.begin(); matrixRowItt != matrix4.end(); ++matrixRowItt) {
+		std::vector<int>& matrixRow = *matrixRowItt;
+		for (std::vector<int>::iterator matrixIndexItt = matrixRow.begin(); matrixIndexItt != matrixRow.end(); ++matrixIndexItt) {
+			*matrixIndexItt = rand() % range;
+		}
+	}
+}
+
+
+void FillInput(int size = currentSize) {
+
+	int i = 0;
+	for each (std::vector<TextBox^> matrixRow in matrix1Box)
+	{
+		if (i < size) {
+			int j = 0;
+			for each (TextBox ^ matrixIndex in matrixRow)
+			{
+				if (j < size) {
+					matrixIndex->Text = i2ps(matrix1[i][j]);
+					j++;
+				}
+			}
+			i++;
+		}
+	}
+
+	i = 0;
+	for each (std::vector<TextBox^> matrixRow in matrix2Box)
+	{
+		if (i < size) {
+			int j = 0;
+			for each (TextBox ^ matrixIndex in matrixRow)
+			{
+				if (j < size) {
+					matrixIndex->Text = i2ps(matrix2[i][j]);
+					j++;
+				}
+			}
+			i++;
+		}
+	}
+
+	i = 0;
+	for each (TextBox ^ vectorRow in vector1Box)
+	{
+		if (i < size) {
+			vectorRow->Text = i2ps(vector1[i]);
+			i++;
+		}
+	}
+
+	i = 0;
+	for each (TextBox ^ vectorRow in vector2Box)
+	{
+		if (i < size) {
+			vectorRow->Text = i2ps(vector2[i]);
+			i++;
+		}
+	}
+
+	i = 0;
+	for each (std::vector<TextBox^> matrixRow in matrix3Box)
+	{
+		if (i < size) {
+			int j = 0;
+			for each (TextBox ^ matrixIndex in matrixRow)
+			{
+				if (j < size) {
+					matrixIndex->Text = i2ps(matrix3[i][j]);;
+					j++;
+				}
+			}
+			i++;
+		}
+	}
+
+	i = 0;
+	for each (std::vector<TextBox^> matrixRow in matrix4Box)
+	{
+		if (i < size) {
+			int j = 0;
+			for each (TextBox ^ matrixIndex in matrixRow)
+			{
+				if (j < size) {
+					matrixIndex->Text = i2ps(matrix4[i][j]);
+					j++;
+				}
+			}
+			i++;
+		}
+	}
+}
+
+
 void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	// Clearing server output area
@@ -444,7 +578,8 @@ void PowerSplitClient::MainPage::SizeButtonClick(Platform::Object^ sender, Windo
 	String^ sizeStr = matrixSize->Text;
 	int size = ps2i(sizeStr);
 	if (size <= maxSize) {
-		FillInputWithZeros(size);
+		currentSize = size;
+		FillInputWithZeros();
 		PrintInput();
 	}
 	else {
@@ -456,7 +591,17 @@ void PowerSplitClient::MainPage::SizeButtonClick(Platform::Object^ sender, Windo
 
 void PowerSplitClient::MainPage::RandomButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
-
+	String^ rangeStr = randomRange->Text;
+	int range = ps2i(rangeStr);
+	if (range <= maxRandomRange) {
+		RandomizeInput(range);
+		FillInput();
+		PrintInput();
+	}
+	else {
+		InfoOutput->Text += "Max random range size is 10000";
+		InfoOutput->Text += "\r\n";
+	}
 }
 
 
