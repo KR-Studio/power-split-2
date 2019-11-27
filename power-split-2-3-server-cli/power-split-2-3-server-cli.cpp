@@ -112,16 +112,16 @@ int main()
 								packetToSend << messageNumberToSend << messageDataSizeToSend << messageDataToSend;
 							}
 							else {
-								try
+								/*try
 								{
 									packetReceived >> rectangleHeight >> rectangleWidth;
 								}
 								catch (NetPacketException& exception)
 								{
 									std::cout << exception.CStr() << std::endl;
-								}
+								}*/
 
-								std::string outputDataStr = std::to_string(messageNumberReceived) + " " + std::to_string(messageDataSizeReceived) + " " + std::to_string(rectangleHeight) + " " + std::to_string(rectangleWidth) + " " + messageDataReceived;
+								/*std::string outputDataStr = std::to_string(messageNumberReceived) + " " + std::to_string(messageDataSizeReceived) + " " + std::to_string(rectangleHeight) + " " + std::to_string(rectangleWidth) + " " + messageDataReceived;
 								std::cout << outputDataStr << std::endl;
 
 								if (messageDataReceived == "Brown")
@@ -235,11 +235,13 @@ int main()
 
 									std::string outputDataStr = messageDataToSend;
 									std::cout << outputDataStr << std::endl;
-								}
+								}*/
+								
+								messageDataToSend = "Result";
 
 								messageNumberToSend = ++numberOfMessage;
 								messageDataSizeToSend = messageDataToSend.size();
-								packetToSend << messageNumberToSend << messageDataSizeToSend << messageDataToSend << rectangleSquare << rectanglesSquare ;
+								packetToSend << messageNumberToSend << messageDataSizeToSend << messageDataToSend ;
 							}
 
 							NetResult resultSent = NetResult::Net_Success;

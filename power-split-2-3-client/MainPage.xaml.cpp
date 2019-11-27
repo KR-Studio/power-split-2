@@ -92,9 +92,23 @@ std::wstring i2ws(const int& dataInt)
 }
 
 
+std::wstring f2ws(const float& dataFloat)
+{
+	std::wstring dataWstr = std::to_wstring(dataFloat);
+	return dataWstr;
+}
+
+
 String^ i2ps(const int& dataInt)
 {
 	String^ dataPstr = ref new String(i2ws(dataInt).c_str());
+	return dataPstr;
+}
+
+
+String^ f2ps(const float& dataFloat)
+{
+	String^ dataPstr = ref new String(f2ws(dataFloat).c_str());
 	return dataPstr;
 }
 
@@ -111,6 +125,7 @@ int numberOfMessage = 0;
 TextBlock^ ComputingOutput;
 // Info output block
 TextBlock^ InfoOutput;
+
 
 // Matrix/Vector Max Size
 const int maxSize = 5;
@@ -133,6 +148,7 @@ std::vector<std::vector<TextBox^>> matrix3Box;
 // Matrix B2 - TextBoxes
 std::vector<std::vector<TextBox^>> matrix4Box;
 
+
 // Matrix A
 std::vector<std::vector<int>> matrix1;
 // Matrix A1
@@ -146,6 +162,69 @@ std::vector<std::vector<int>> matrix3;
 // Matrix B2
 std::vector<std::vector<int>> matrix4;
 
+
+// Vector y1
+std::vector<float> vector_ans_1;
+// Vector y2
+std::vector<float> vector_ans_2;
+// Matrix Y3
+std::vector<std::vector<float>> matrix_ans_1;
+
+
+// Define type for f(x)
+typedef int(*pointFunction)(int);
+
+
+float y1i(std::vector<int> A, float bi) {
+	float y1i = 0;
+	for each (int Ai in A)
+	{
+		y1i += Ai * bi;
+	}
+	return y1i;
+}
+
+float y2i(std::vector<int> A1, float bci) {
+	float y2i = 0;
+	for each (int Ai in A1)
+	{
+		y2i += Ai * bci;
+	}
+	return y2i;
+}
+
+
+// variant 1 (13, 25)
+float biV1(int i) {
+	if (i % 2 == 0)
+		return (1 / (pow(i, 2) + 2));
+	else
+		return (1 / (float)i);
+}
+
+int bciV1(int b1, int c1) {
+	return b1 + c1;
+}
+
+
+// variant 6 (18)
+float biV6(int i) {
+	return 6 / pow(i, 2);
+}
+
+int bciV6(int b1, int c1) {
+	return 6 * b1 - c1;
+}
+
+
+// variant 8
+float biV8(int i) {
+	return (8 / (float)i);
+}
+
+int bciV8(int b1, int c1) {
+	return 2 * b1 + 3 * c1;
+}
 
 void PrintInput() {
 
@@ -519,6 +598,112 @@ void FillInput(int size = currentSize) {
 }
 
 
+void CalculateResults(int variantIndex = 0)
+{
+	// Calculate y1
+	// y1 = A * b
+	vector_ans_1.clear();
+	int i = 0;
+	for each (std::vector<int> matrixRow in matrix1)
+	{
+		if (i < currentSize) {
+			switch (variantIndex)
+			{
+			case 0: {
+				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(biV1(i + 1)) + "\r\n";
+				vector_ans_1.push_back(y1i(matrixRow, biV1(i + 1)));
+				break;
+			}
+			case 1: {
+				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(biV6(i + 1)) + "\r\n";
+				vector_ans_1.push_back(y1i(matrixRow, biV6(i + 1)));
+				break;
+			}
+			case 2: {
+				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(biV8(i + 1)) + "\r\n";
+				vector_ans_1.push_back(y1i(matrixRow, biV8(i + 1)));
+				break;
+			}
+			default:
+				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(biV1(i + 1)) + "\r\n";
+				vector_ans_1.push_back(y1i(matrixRow, biV8(i + 1)));
+				break;
+			}
+			i++;
+		}
+	}
+	ComputingOutput->Text += "\r\n";
+
+	// Calculate y2
+	// y2 = A1 * bc
+	vector_ans_2.clear();
+	i = 0;
+	for each (std::vector<int> matrixRow in matrix2)
+	{
+		if (i < currentSize) {
+			switch (variantIndex)
+			{
+			case 0: {
+				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(bciV1(vector1[i], vector2[i])) + "\r\n";
+				vector_ans_2.push_back(y2i(matrixRow, bciV1(vector1[i], vector2[i])));
+				break;
+			}
+			case 1: {
+				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(bciV6(vector1[i], vector2[i])) + "\r\n";
+				vector_ans_2.push_back(y2i(matrixRow, bciV6(vector1[i], vector2[i])));
+				break;
+			}
+			case 2: {
+				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(bciV8(vector1[i], vector2[i])) + "\r\n";
+				vector_ans_2.push_back(y2i(matrixRow, bciV8(vector1[i], vector2[i])));
+				break;
+			}
+			default:
+				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(bciV1(vector1[i], vector2[i])) + "\r\n";
+				vector_ans_2.push_back(y2i(matrixRow, bciV1(vector1[i], vector2[i])));
+				break;
+			}
+			i++;
+		}
+	}
+	ComputingOutput->Text += "\r\n";
+}
+
+
+void PrintResults()
+{
+	/*ComputingOutput->Text += "Matrix A1:\r\n";
+	for each (std::vector<int> matrixRow in matrix2)
+	{
+		for each (int matrixColumn in matrixRow)
+		{
+			ComputingOutput->Text += i2ps(matrixColumn) + " ";
+		}
+
+		ComputingOutput->Text += "\r\n";
+	}
+	ComputingOutput->Text += "\r\n";*/
+
+	ComputingOutput->Text += "Vector y1:\r\n";
+	for each (float vectorRow in vector_ans_1)
+	{
+		ComputingOutput->Text += f2ps(vectorRow);
+		ComputingOutput->Text += "\r\n";
+	}
+	ComputingOutput->Text += "\r\n";
+
+	ComputingOutput->Text += "Vector y2:\r\n";
+	for each (float vectorRow in vector_ans_2)
+	{
+		ComputingOutput->Text += f2ps(vectorRow);
+		ComputingOutput->Text += "\r\n";
+	}
+	ComputingOutput->Text += "\r\n";
+
+	ComputingOutput->Text += "\r\n";
+}
+
+
 void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	// Clearing server output area
@@ -569,7 +754,7 @@ void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::U
 	};
 
 	FillInputWithZeros();
-	PrintInput();
+	//PrintInput();
 }
 
 
@@ -580,7 +765,7 @@ void PowerSplitClient::MainPage::SizeButtonClick(Platform::Object^ sender, Windo
 	if (size <= maxSize) {
 		currentSize = size;
 		FillInputWithZeros();
-		PrintInput();
+		//PrintInput();
 	}
 	else {
 		InfoOutput->Text += "Max Matrix/Vector size is 5";
@@ -596,7 +781,7 @@ void PowerSplitClient::MainPage::RandomButtonClick(Platform::Object^ sender, Win
 	if (range <= maxRandomRange) {
 		RandomizeInput(range);
 		FillInput();
-		PrintInput();
+		//PrintInput();
 	}
 	else {
 		InfoOutput->Text += "Max random range size is 10000";
@@ -758,6 +943,9 @@ void PowerSplitClient::MainPage::DisconnectButtonClick(Platform::Object^ sender,
 
 void PowerSplitClient::MainPage::SendButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
+	CalculateResults(variantsList->SelectedIndex);
+	PrintResults();
+
 	// Check active connection with server
 	if (ifConnected == NetResult::Net_NotYetImplemented)
 	{
@@ -767,16 +955,17 @@ void PowerSplitClient::MainPage::SendButtonClick(Platform::Object^ sender, Windo
 	else
 	{
 		// Prepare sending data
-		uint32_t rectangleHeight, rectangleWidth;
 		uint32_t messageNumberToSend, messageDataSizeToSend;
 		std::string messageDataToSend;
-		rectangleHeight = 150;
-		rectangleWidth = 60;
-		messageDataToSend = "Brown";
+
+		CalculateResults(variantsList->SelectedIndex);
+
+		messageDataToSend = "Calculate";
+
 		messageNumberToSend = ++numberOfMessage;
 		messageDataSizeToSend = messageDataToSend.size();
 		NetPacket packetToSend;
-		packetToSend << messageNumberToSend << messageDataSizeToSend << messageDataToSend << rectangleHeight << rectangleWidth;
+		packetToSend << messageNumberToSend << messageDataSizeToSend << messageDataToSend;
 
 		// Send the prepared packet with data
 		NetResult resultSent = NetResult::Net_Success;
@@ -796,8 +985,6 @@ void PowerSplitClient::MainPage::SendButtonClick(Platform::Object^ sender, Windo
 
 		// Wait for response data from server
 		uint32_t messageNumberReceived, messageDataSizeReceived;
-		uint32_t rectangleSquare, rectanglesSquare;
-		std::string rectangleSquareStr, rectanglesSquareStr;
 		std::string messageDataReceived;
 		NetPacket packetReceived;
 		NetResult resultReceived = NetResult::Net_Success;
@@ -811,7 +998,7 @@ void PowerSplitClient::MainPage::SendButtonClick(Platform::Object^ sender, Windo
 			ComputingOutput->Text += s2ps(outputDataStr);
 			try
 			{
-				packetReceived >> messageNumberReceived >> messageDataSizeReceived >> messageDataReceived >> rectangleSquare >> rectanglesSquare;
+				packetReceived >> messageNumberReceived >> messageDataSizeReceived >> messageDataReceived;
 			}
 			catch (NetPacketException & exception)
 			{
@@ -819,13 +1006,9 @@ void PowerSplitClient::MainPage::SendButtonClick(Platform::Object^ sender, Windo
 				ComputingOutput->Text += s2ps(outputDataStr);
 			}
 
-			rectangleSquareStr = std::to_string(rectangleSquare);
-			rectanglesSquareStr = std::to_string(rectanglesSquare);
+			PrintResults();
 
-			/*taskControl1Square->Text = s2ps(rectangleSquareStr);
-			generalSquareValue->Text = s2ps(rectanglesSquareStr);*/
-
-			outputDataStr = std::to_string(messageNumberReceived) + " " + std::to_string(messageDataSizeReceived) + " " + rectangleSquareStr + " " + rectanglesSquareStr + " " + messageDataReceived + "\r\n";
+			outputDataStr = std::to_string(messageNumberReceived) + " " + std::to_string(messageDataSizeReceived) + " " + messageDataReceived + "\r\n";
 			ComputingOutput->Text += s2ps(outputDataStr);
 			break;
 		}

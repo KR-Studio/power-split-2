@@ -34,7 +34,12 @@
                         <TextBlock x:Name="portTextBlock" Text="Port:" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Width="100" Margin="10,10,10,10"></TextBlock>
                         <TextBox  x:Name="portTextBox" Text="80" Width="240" TextWrapping="Wrap" FontSize="18" Margin="0,10,10,10"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="10,85,10,10">
+                    <ListView  x:Name="variantsList" Height="75" SelectedIndex="0" Margin="10,0,10,0">
+                        <TextBlock x:Name="variant1" TextWrapping="Wrap" Text="Variant 1" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <TextBlock x:Name="variant6" TextWrapping="Wrap" Text="Variant 6" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <TextBlock x:Name="variant8" TextWrapping="Wrap" Text="Variant 8" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    </ListView>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
                         <Button x:Name="sendBtn" Content="Send" Width="380" FontSize="22" Margin="10,10,10,10" Click="SendButtonClick"></Button>
                     </StackPanel>
                 </StackPanel>
