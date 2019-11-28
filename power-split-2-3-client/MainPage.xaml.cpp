@@ -171,6 +171,246 @@ std::vector<float> vector_ans_2;
 std::vector<std::vector<float>> matrix_ans_1;
 
 
+std::vector<float> MatrixMultVector(std::vector<std::vector<float>> matrix, std::vector<float> vector)
+{
+	std::vector<float> newVector;
+
+	int i = 0;
+	for each (std::vector<float> matrixRow in matrix)
+	{
+		if (i < currentSize)
+		{
+			float newVectorIndex = 0;
+
+			int j = 0;
+			for each (float matrixIndex in matrixRow)
+			{
+				if (j < currentSize)
+				{
+					newVectorIndex += matrixIndex * vector[i];
+					j++;
+				}
+			}
+
+			newVector.push_back(newVectorIndex);
+			i++;
+		}
+	}
+
+	return newVector;
+}
+
+
+std::vector<std::vector<float>> MatrixMultMatrix(std::vector<std::vector<float>> matrix1, std::vector<std::vector<float>> matrix2)
+{
+	std::vector<std::vector<float>> newMatrix;
+
+	for (int i = 0; i < maxSize; i++) 
+	{
+		std::vector<float> newMatrixRow;
+
+		for (int j = 0; j < maxSize; j++) 
+		{
+			float newMatrixIndex = 0;
+
+			for (int r = 0; r < maxSize; r++)
+			{
+				newMatrixIndex += matrix1[i][r] * matrix2[r][j];
+			}
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+std::vector<std::vector<float>> MatrixMultMatrix(std::vector<std::vector<int>> matrix1, std::vector<std::vector<float>> matrix2)
+{
+	std::vector<std::vector<float>> newMatrix;
+
+	for (int i = 0; i < maxSize; i++)
+	{
+		std::vector<float> newMatrixRow;
+
+		for (int j = 0; j < maxSize; j++)
+		{
+			float newMatrixIndex = 0;
+
+			for (int r = 0; r < maxSize; r++)
+			{
+				newMatrixIndex += matrix1[i][r] * matrix2[r][j];
+			}
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+
+std::vector<std::vector<float>> MatrixAddMatrix(std::vector<std::vector<float>> matrix1, std::vector<std::vector<float>> matrix2)
+{
+	std::vector<std::vector<float>> newMatrix;
+
+	for (int i = 0; i < maxSize; i++)
+	{
+		std::vector<float> newMatrixRow;
+
+		for (int j = 0; j < maxSize; j++)
+		{
+			float newMatrixIndex = 0;
+
+			newMatrixIndex += matrix1[i][j] + matrix2[i][j];
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+std::vector<std::vector<float>> MatrixAddMatrix(std::vector<std::vector<int>> matrix1, std::vector<std::vector<float>> matrix2)
+{
+	std::vector<std::vector<float>> newMatrix;
+
+	for (int i = 0; i < maxSize; i++)
+	{
+		std::vector<float> newMatrixRow;
+
+		for (int j = 0; j < maxSize; j++)
+		{
+			float newMatrixIndex = 0;
+
+			newMatrixIndex += matrix1[i][j] + matrix2[i][j];
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+
+std::vector<std::vector<float>> MatrixSubtrMatrix(std::vector<std::vector<float>> matrix1, std::vector<std::vector<float>> matrix2)
+{
+	std::vector<std::vector<float>> newMatrix;
+
+	for (int i = 0; i < maxSize; i++)
+	{
+		std::vector<float> newMatrixRow;
+
+		for (int j = 0; j < maxSize; j++)
+		{
+			float newMatrixIndex = 0;
+
+			newMatrixIndex += matrix1[i][j] - matrix2[i][j];
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+std::vector<std::vector<float>> MatrixSubtrMatrix(std::vector<std::vector<int>> matrix1, std::vector<std::vector<float>> matrix2)
+{
+	std::vector<std::vector<float>> newMatrix;
+
+	for (int i = 0; i < maxSize; i++)
+	{
+		std::vector<float> newMatrixRow;
+
+		for (int j = 0; j < maxSize; j++)
+		{
+			float newMatrixIndex = 0;
+
+			newMatrixIndex += matrix1[i][j] - matrix2[i][j];
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+
+std::vector<std::vector<float>> MatrixMultNumber(std::vector<std::vector<float>> matrix, float number)
+{
+	std::vector<std::vector<float>> newMatrix;
+
+	for (int i = 0; i < maxSize; i++)
+	{
+		std::vector<float> newMatrixRow;
+
+		for (int j = 0; j < maxSize; j++)
+		{
+			float newMatrixIndex = 0;
+
+			newMatrixIndex += matrix[i][j] * number;
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+std::vector<std::vector<float>> MatrixMultNumber(std::vector<std::vector<int>> matrix, float number)
+{
+	std::vector<std::vector<float>> newMatrix;
+
+	for (int i = 0; i < maxSize; i++)
+	{
+		std::vector<float> newMatrixRow;
+
+		for (int j = 0; j < maxSize; j++)
+		{
+			float newMatrixIndex = 0;
+
+			newMatrixIndex += matrix[i][j] * number;
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+
 // Define type for f(x)
 typedef int(*pointFunction)(int);
 
@@ -206,6 +446,37 @@ int bciV1(int b1, int c1) {
 	return b1 + c1;
 }
 
+std::vector<std::vector<float>> C2V1()
+{
+	std::vector<std::vector<float>> newMatrix;
+
+	for (int i = 0; i < maxSize; i++)
+	{
+		std::vector<float> newMatrixRow;
+
+		for (int j = 0; j < maxSize; j++)
+		{
+			float newMatrixIndex = 0;
+
+			newMatrixIndex += (1 / (float)i + 2 * (float)j);
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+
+std::vector<std::vector<float>> BCV1()
+{
+	return (MatrixSubtrMatrix(matrix4, C2V1()));
+}
+
 
 // variant 6 (18)
 float biV6(int i) {
@@ -214,6 +485,36 @@ float biV6(int i) {
 
 int bciV6(int b1, int c1) {
 	return 6 * b1 - c1;
+}
+
+std::vector<std::vector<float>> C2V6()
+{
+	std::vector<std::vector<float>> newMatrix;
+
+	for (int i = 0; i < maxSize; i++)
+	{
+		std::vector<float> newMatrixRow;
+
+		for (int j = 0; j < maxSize; j++)
+		{
+			float newMatrixIndex = 0;
+
+			newMatrixIndex += (1 / pow(((float)i + (float)j), 3));
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+std::vector<std::vector<float>> BCV6()
+{
+	return (MatrixSubtrMatrix(MatrixMultNumber(matrix4, 10), C2V6()));
 }
 
 
@@ -225,6 +526,37 @@ float biV8(int i) {
 int bciV8(int b1, int c1) {
 	return 2 * b1 + 3 * c1;
 }
+
+std::vector<std::vector<float>> C2V8()
+{
+	std::vector<std::vector<float>> newMatrix;
+
+	for (int i = 0; i < maxSize; i++)
+	{
+		std::vector<float> newMatrixRow;
+
+		for (int j = 0; j < maxSize; j++)
+		{
+			float newMatrixIndex = 0;
+
+			newMatrixIndex += (1 / ((float)i + (float)j + 2));
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+std::vector<std::vector<float>> BCV8()
+{
+	return (MatrixSubtrMatrix(matrix4, C2V8()));
+}
+
 
 void PrintInput() {
 
@@ -610,31 +942,26 @@ void CalculateResults(int variantIndex = 0)
 			switch (variantIndex)
 			{
 			case 0: {
-				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(biV1(i + 1)) + "\r\n";
 				vector_ans_1.push_back(y1i(matrixRow, biV1(i + 1)));
 				break;
 			}
 			case 1: {
-				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(biV6(i + 1)) + "\r\n";
 				vector_ans_1.push_back(y1i(matrixRow, biV6(i + 1)));
 				break;
 			}
 			case 2: {
-				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(biV8(i + 1)) + "\r\n";
 				vector_ans_1.push_back(y1i(matrixRow, biV8(i + 1)));
 				break;
 			}
 			default:
-				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(biV1(i + 1)) + "\r\n";
 				vector_ans_1.push_back(y1i(matrixRow, biV8(i + 1)));
 				break;
 			}
 			i++;
 		}
 	}
-	ComputingOutput->Text += "\r\n";
 
-	// Calculate y2
+	// Calculatey2
 	// y2 = A1 * bc
 	vector_ans_2.clear();
 	i = 0;
@@ -644,46 +971,50 @@ void CalculateResults(int variantIndex = 0)
 			switch (variantIndex)
 			{
 			case 0: {
-				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(bciV1(vector1[i], vector2[i])) + "\r\n";
 				vector_ans_2.push_back(y2i(matrixRow, bciV1(vector1[i], vector2[i])));
 				break;
 			}
 			case 1: {
-				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(bciV6(vector1[i], vector2[i])) + "\r\n";
 				vector_ans_2.push_back(y2i(matrixRow, bciV6(vector1[i], vector2[i])));
 				break;
 			}
 			case 2: {
-				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(bciV8(vector1[i], vector2[i])) + "\r\n";
 				vector_ans_2.push_back(y2i(matrixRow, bciV8(vector1[i], vector2[i])));
 				break;
 			}
 			default:
-				ComputingOutput->Text += "i" + i2ps(i) + " " + "b" + f2ps(bciV1(vector1[i], vector2[i])) + "\r\n";
 				vector_ans_2.push_back(y2i(matrixRow, bciV1(vector1[i], vector2[i])));
 				break;
 			}
 			i++;
 		}
 	}
-	ComputingOutput->Text += "\r\n";
+
+	// Calculate Y3
+	// Y3 = A3 * BC
+	switch (variantIndex)
+	{
+	case 0: {
+		matrix_ans_1 = MatrixMultMatrix(matrix3, BCV1());
+		break;
+	}
+	case 1: {
+		matrix_ans_1 = MatrixMultMatrix(matrix3, BCV6());
+		break;
+	}
+	case 2: {
+		matrix_ans_1 = MatrixMultMatrix(matrix3, BCV8());
+		break;
+	}
+	default:
+		matrix_ans_1 = MatrixMultMatrix(matrix3, BCV1());
+		break;
+	}
 }
 
 
 void PrintResults()
 {
-	/*ComputingOutput->Text += "Matrix A1:\r\n";
-	for each (std::vector<int> matrixRow in matrix2)
-	{
-		for each (int matrixColumn in matrixRow)
-		{
-			ComputingOutput->Text += i2ps(matrixColumn) + " ";
-		}
-
-		ComputingOutput->Text += "\r\n";
-	}
-	ComputingOutput->Text += "\r\n";*/
-
 	ComputingOutput->Text += "Vector y1:\r\n";
 	for each (float vectorRow in vector_ans_1)
 	{
@@ -696,6 +1027,18 @@ void PrintResults()
 	for each (float vectorRow in vector_ans_2)
 	{
 		ComputingOutput->Text += f2ps(vectorRow);
+		ComputingOutput->Text += "\r\n";
+	}
+	ComputingOutput->Text += "\r\n";
+
+	ComputingOutput->Text += "Matrix Y3:\r\n";
+	for each (std::vector<float> matrixRow in matrix_ans_1)
+	{
+		for each (int matrixColumn in matrixRow)
+		{
+			ComputingOutput->Text += f2ps(matrixColumn) + " ";
+		}
+
 		ComputingOutput->Text += "\r\n";
 	}
 	ComputingOutput->Text += "\r\n";
