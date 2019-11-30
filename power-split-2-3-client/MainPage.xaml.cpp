@@ -1458,9 +1458,6 @@ void PowerSplitClient::MainPage::DisconnectButtonClick(Platform::Object^ sender,
 
 void PowerSplitClient::MainPage::SendButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
-	CalculateResults(variantsList->SelectedIndex);
-	PrintResults();
-
 	// Check active connection with server
 	if (ifConnected == NetResult::Net_NotYetImplemented)
 	{
@@ -1474,7 +1471,6 @@ void PowerSplitClient::MainPage::SendButtonClick(Platform::Object^ sender, Windo
 		std::string messageDataToSend;
 
 		CalculateResults(variantsList->SelectedIndex);
-
 		messageDataToSend = "Calculate";
 
 		messageNumberToSend = ++numberOfMessage;
