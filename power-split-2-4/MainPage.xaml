@@ -6,9 +6,135 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
+    Loaded="PageLoaded">
 
     <Grid>
-
+        <StackPanel x:Name="contentPanel" Orientation="Vertical" Margin="120,30,0,0">
+            <TextBlock x:Name="title" HorizontalAlignment="Left" Text="PowerSplit 2-4" FontSize="36"/>
+            <StackPanel Orientation="Horizontal" Margin="0,40,0,20">
+                <StackPanel x:Name="serverInfoPanel" Orientation="Vertical" Width="400">
+                    <StackPanel x:Name="computingPanel" Orientation="Vertical" Width="400" Margin="10,10,10,10" Height="50">
+                        <TextBlock x:Name="computingText" Text="Computing results:" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel x:Name="computingTextPanel" Width="380" Margin="10,10,10,10">
+                        <Border BorderThickness="1" BorderBrush="White">
+                            <ScrollViewer Height="220">
+                                <TextBlock x:Name="textBlockComputingOutput" Text="Area for computing info" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
+                            </ScrollViewer>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel x:Name="settingsPanel" Width="400">
+                    <StackPanel x:Name="variantsTextPanel" Orientation="Vertical" Width="400" Margin="10,10,10,10" Height="50">
+                        <TextBlock x:Name="variantsText" Text="Variants:" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                    </StackPanel>
+                    <ListView  x:Name="variantsList" Height="80" SelectedIndex="0" Margin="10,10,10,10">
+                        <TextBlock x:Name="variant1" TextWrapping="Wrap" Text="Variant 1" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <TextBlock x:Name="variant8" TextWrapping="Wrap" Text="Variant 8" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    </ListView>
+                    <StackPanel Orientation="Horizontal" Margin="20,0,10,0">
+                        <RadioButton x:Name="ssaRadioButton" Content="SSA" GroupName="methodsRadioGroup" Checked="MethodsRadioChecked" IsChecked="True"/>
+                        <RadioButton x:Name="lrpRadioButton" Content="LRP" GroupName="methodsRadioGroup" Checked="MethodsRadioChecked"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
+                        <Button x:Name="sendBtn" Content="Calculate" Width="380" FontSize="22" Margin="10,10,10,10" Click="CalculateButtonClick"></Button>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <ScrollViewer Height="340">
+                <StackPanel Orientation="Vertical" Margin="20,0,20,0">
+                    <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                        <TextBlock x:Name="matrixSizeText" TextWrapping="Wrap" Text="Matrix size:" Margin="0,10,0,10" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{ThemeResource BaseTextBlockStyle}"></TextBlock>
+                        <TextBox  x:Name="matrixSize" Text="5" TextWrapping="Wrap" FontSize="22" VerticalAlignment="Center" Margin="10,10,10,10"/>
+                        <Button x:Name="sizeBtn" Content="Resize" Width="100" FontSize="22" Margin="40,10,40,10" Click="SizeButtonClick"></Button>
+                        <TextBlock x:Name="randomRangeText" TextWrapping="Wrap" Text="Random range:" Margin="25,10,0,10" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{ThemeResource BaseTextBlockStyle}"></TextBlock>
+                        <TextBox  x:Name="randomRange" Text="100" TextWrapping="Wrap" Width="80" FontSize="22" VerticalAlignment="Center" Margin="10,10,10,10"/>
+                        <Button x:Name="randomBtn" Content="Randomize" Width="140" FontSize="22" Margin="40,10,10,10" Click="RandomButtonClick"></Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="20,0,0,20">
+                        <TextBlock x:Name="matrix1Text" TextWrapping="Wrap" Text="Matrix A:" Width="400" Margin="0,10,0,10" FontSize="18" HorizontalAlignment="Left" Style="{ThemeResource BaseTextBlockStyle}"></TextBlock>
+                        <TextBlock x:Name="matrix2Text" TextWrapping="Wrap" Text="Matrix B:" Width="400" Margin="0,10,0,10" FontSize="18" HorizontalAlignment="Left" Style="{ThemeResource BaseTextBlockStyle}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="20,0,20,0">
+                        <StackPanel Orientation="Vertical" Width="400" Margin="0,0,0,0" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBox x:Name="matrix1Row1Column1" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row1Column2" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row1Column3" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row1Column4" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row1Column5" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBox x:Name="matrix1Row2Column1" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row2Column2" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row2Column3" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row2Column4" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row2Column5" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBox x:Name="matrix1Row3Column1" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row3Column2" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row3Column3" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row3Column4" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row3Column5" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBox x:Name="matrix1Row4Column1" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row4Column2" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row4Column3" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row4Column4" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row4Column5" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                <TextBox x:Name="matrix1Row5Column1" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row5Column2" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row5Column3" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row5Column4" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix1Row5Column5" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Vertical" Width="400" Margin="0,0,0,0" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBox x:Name="matrix2Row1Column1" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row1Column2" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row1Column3" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row1Column4" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row1Column5" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBox x:Name="matrix2Row2Column1" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row2Column2" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row2Column3" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row2Column4" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row2Column5" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBox x:Name="matrix2Row3Column1" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row3Column2" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row3Column3" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row3Column4" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row3Column5" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBox x:Name="matrix2Row4Column1" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row4Column2" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row4Column3" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row4Column4" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row4Column5" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                <TextBox x:Name="matrix2Row5Column1" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row5Column2" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row5Column3" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row5Column4" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,10,0"/>
+                                <TextBox x:Name="matrix2Row5Column5" Text="" TextWrapping="Wrap" FontSize="22" Margin="0,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </StackPanel>
     </Grid>
 </Page>
