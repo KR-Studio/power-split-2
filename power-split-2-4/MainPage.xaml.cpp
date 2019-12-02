@@ -403,6 +403,83 @@ void FillInput(int size = currentSize) {
 }
 
 
+// Calculation steps
+int calculationSteps = 0;
+
+
+std::vector<std::vector<int>> MatrixMultMatrix(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2)
+{
+	calculationSteps = 0;
+
+	std::vector<std::vector<int>> newMatrix;
+
+	for (int i = 0; i < currentSize; i++)
+	{
+		std::vector<int> newMatrixRow;
+
+		std::vector<int> newMatrixIndexRow;
+		int newMatrixIndex = 0;
+		for (int j = 0; j < currentSize; j++)
+		{
+			newMatrixIndex = 0;
+			newMatrixIndexRow.clear();
+			for (int r = 0; r < currentSize; r++)
+			{
+				newMatrixIndex += matrix1[i][r] * matrix2[r][j];
+				calculationSteps++;
+			}
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		for (int r = 0; r < currentSize; r++)
+		{
+			newMatrixIndexRow.push_back(newMatrixIndex);
+			calculationSteps++;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+
+std::vector<std::vector<int>> MatrixMultMatrixRec(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2)
+{
+	calculationSteps = 0;
+
+	std::vector<std::vector<int>> newMatrix;
+
+	for (int i = 0; i < currentSize; i++)
+	{
+		std::vector<int> newMatrixRow;
+
+		for (int j = 0; j < currentSize; j++)
+		{
+			int newMatrixIndex = 0;
+			std::vector<int> newMatrixIndexRow;
+
+			for (int r = 0; r < currentSize; r++)
+			{
+				newMatrixIndex += matrix1[i][r] * matrix2[r][j];
+				calculationSteps++;
+			}
+
+			newMatrixRow.push_back(newMatrixIndex);
+			newMatrixIndex = 0;
+		}
+
+		newMatrix.push_back(newMatrixRow);
+		newMatrixRow.clear();
+	}
+
+	return newMatrix;
+}
+
+
 // Matrix AB
 std::vector<std::vector<int>> matrix_ans;
 
@@ -412,11 +489,11 @@ void CalculateResults()
 	switch (methodIndex)
 	{
 	case 0: {
-		matrix_ans;
+		matrix_ans = MatrixMultMatrix(matrix1, matrix2);
 		break;
 	}
 	case 1: {
-		matrix_ans;
+		matrix_ans = MatrixMultMatrixRec(matrix1, matrix2);
 		break;
 	}
 	default:
@@ -438,6 +515,11 @@ void PrintResults()
 	}
 	ComputingOutput->Text += "\r\n";
 
+	if (variantIndex == 1)
+	{
+		calculationSteps -= 15;
+	}
+	ComputingOutput->Text += "Calculation steps: " + i2ps(calculationSteps);
 	ComputingOutput->Text += "\r\n";
 }
 
@@ -465,33 +547,4 @@ void PowerSplit::MainPage::RandomButtonClick(Platform::Object^ sender, Windows::
 		ComputingOutput->Text += "Max random range size is 1000";
 		ComputingOutput->Text += "\r\n";
 	}
-}
-
-
-std::vector<std::vector<int>> MatrixMultMatrix(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2)
-{
-	std::vector<std::vector<int>> newMatrix;
-
-	for (int i = 0; i < currentSize; i++)
-	{
-		std::vector<int> newMatrixRow;
-
-		for (int j = 0; j < currentSize; j++)
-		{
-			int newMatrixIndex = 0;
-
-			for (int r = 0; r < currentSize; r++)
-			{
-				newMatrixIndex += matrix1[i][r] * matrix2[r][j];
-			}
-
-			newMatrixRow.push_back(newMatrixIndex);
-			newMatrixIndex = 0;
-		}
-
-		newMatrix.push_back(newMatrixRow);
-		newMatrixRow.clear();
-	}
-
-	return newMatrix;
 }
