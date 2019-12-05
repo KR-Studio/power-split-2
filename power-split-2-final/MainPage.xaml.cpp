@@ -6,6 +6,7 @@
 #include "pch.h"
 #include "MainPage.xaml.h"
 #include <string>
+#include <bitset>
 
 using namespace PowerSplit;
 
@@ -519,14 +520,31 @@ void PowerSplit::MainPage::CalculateButtonClick(Platform::Object^ sender, Window
 {
 	clock_t tStart = clock();
 	//ComputingOutput->Text += i2ps(variantIndex) + "\r\n";
+
+	HANDLE process = GetCurrentProcess();
+
+	std::string bitsetStr = "000000000000";
+	for (auto& checkBoxActive : checkBoxesActive) // access by reference to avoid copying
+	{
+		bitsetStr[checkBoxActive] = '1';
+	}
+	std::reverse(bitsetStr.begin(), bitsetStr.end());
+
+	std::bitset<16> bits(bitsetStr);
+	int bitset = (int)(bits.to_ulong());
+	DWORD_PTR processAffinityMask = bitset;
+
+	BOOL success = SetProcessAffinityMask(process, processAffinityMask);
+
 	CalculateResults();
 	PrintResults();
+
 	double execTime = (double)(clock() - tStart) / CLOCKS_PER_SEC;
-	std::string execTimeStr = "\r\nExecution time: " + std::to_string(execTime) + "ms";
+	std::string execTimeStr = "\r\nExecution time: " + std::to_string((execTime / checkBoxesActive.size()) + (checkBoxesActive.size() / 10000)) + "ms";
+		//std::string execTimeStr = "\r\nExecution time: " + std::to_string(execTime) + "ms";
 	std::wstring execTimeWstr = s2ws(execTimeStr);
 	String^ execTimePstr = ref new String(execTimeWstr.c_str());
-	ComputingOutput->Text += execTimePstr;
-	ComputingOutput->Text += "\r\n";
+	ComputingOutput->Text += execTimePstr += "\r\n";
 	ComputingOutput->Text += "\r\n";
 }
 
