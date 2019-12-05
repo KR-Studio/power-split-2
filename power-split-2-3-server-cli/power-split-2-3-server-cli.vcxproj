@@ -73,7 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
-    <LibraryPath>$(OutDir);D:\[projects]\Visual Studio\GitHub\power-split\x64\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(OutDir);D:\[projects]\Visual Studio\GitHub\power-split\x64\Debug;D:\Projects\power-split-2\x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>

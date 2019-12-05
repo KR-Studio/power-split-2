@@ -8,8 +8,14 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "power-split-net", "power-split-net\power-split-net.vcxproj", "{DF5F1E4C-10EF-4303-ABBB-9F47C6047342}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "power-split-2-3-client", "power-split-2-3-client\power-split-2-3-client.vcxproj", "{7AD03B86-94CD-47CF-8E98-70F5AAC56F0E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF5F1E4C-10EF-4303-ABBB-9F47C6047342} = {DF5F1E4C-10EF-4303-ABBB-9F47C6047342}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "power-split-2-3-server-cli", "power-split-2-3-server-cli\power-split-2-3-server-cli.vcxproj", "{BD615623-F957-4D66-8CA7-5795E09E1FE4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF5F1E4C-10EF-4303-ABBB-9F47C6047342} = {DF5F1E4C-10EF-4303-ABBB-9F47C6047342}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "power-split-2-4", "power-split-2-4\power-split-2-4.vcxproj", "{0D13CE20-A3AF-4BEC-B61E-900BC212A9E3}"
 EndProject

@@ -22,6 +22,13 @@ using namespace Windows::UI::Xaml::Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
+std::wstring s2ws(const std::string& str)
+{
+	int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+	std::wstring wstrTo(size_needed, 0);
+	MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+	return wstrTo;
+}
 
 std::wstring i2ws(const int& dataInt)
 {
@@ -496,7 +503,6 @@ void PrintResults()
 		}
 		ComputingOutput->Text += "\r\n";
 	}
-	ComputingOutput->Text += "\r\n";
 
 	matrix_ans.clear();
 
@@ -511,9 +517,17 @@ void PrintResults()
 
 void PowerSplit::MainPage::CalculateButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
+	clock_t tStart = clock();
 	//ComputingOutput->Text += i2ps(variantIndex) + "\r\n";
 	CalculateResults();
 	PrintResults();
+	double execTime = (double)(clock() - tStart) / CLOCKS_PER_SEC;
+	std::string execTimeStr = "\r\nExecution time: " + std::to_string(execTime) + "ms";
+	std::wstring execTimeWstr = s2ws(execTimeStr);
+	String^ execTimePstr = ref new String(execTimeWstr.c_str());
+	ComputingOutput->Text += execTimePstr;
+	ComputingOutput->Text += "\r\n";
+	ComputingOutput->Text += "\r\n";
 }
 
 
